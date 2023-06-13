@@ -1,12 +1,8 @@
 github_users:
-  - torvalds
-  - alshedivat
+  - marcoberlot
+  - marcoberlot1
 
 github_repos:
-  - alshedivat/al-folio
-  - twbs/bootstrap
-  - jekyll/jekyll
-  - jquery/jquery
-  - FortAwesome/Font-Awesome
-  - jpswalsh/academicons
-  - mathjax/MathJax
+  - MarcoBerlot/Languages_for_Machine_Translation
+  - MarcoBerlot/TellMeQuality
+  - MarcoBerlot/Cognitiva
