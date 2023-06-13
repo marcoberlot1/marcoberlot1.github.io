@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="https://alshedivat.github.io/al-folio/feed.xml" rel="self" type="application/atom+xml" /><link href="https://alshedivat.github.io/al-folio/" rel="alternate" type="text/html" hreflang="en" /><updated>2023-06-13T16:19:13+00:00</updated><id>https://alshedivat.github.io/al-folio/feed.xml</id><title type="html">blank</title><subtitle>Personal Website of Computer Scientist Marco Berlot.
-</subtitle><entry><title type="html">How to Leverage AWS Step Functions to Build an Event-Driven Architecture</title><link href="https://alshedivat.github.io/al-folio/blog/2022/leverage-aws-step-functions/" rel="alternate" type="text/html" title="How to Leverage AWS Step Functions to Build an Event-Driven Architecture" /><published>2022-11-20T17:03:20+00:00</published><updated>2022-11-20T17:03:20+00:00</updated><id>https://alshedivat.github.io/al-folio/blog/2022/leverage-aws-step-functions</id><content type="html" xml:base="https://alshedivat.github.io/al-folio/blog/2022/leverage-aws-step-functions/"><![CDATA[<h2 id="introduction">Introduction</h2>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="https://marcoberlot1.github.io/marcoberlot1.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://marcoberlot1.github.io/marcoberlot1.github.io/" rel="alternate" type="text/html" hreflang="en" /><updated>2023-06-13T16:28:08+00:00</updated><id>https://marcoberlot1.github.io/marcoberlot1.github.io/feed.xml</id><title type="html">blank</title><subtitle>Personal Website of Computer Scientist Marco Berlot.
+</subtitle><entry><title type="html">How to Leverage AWS Step Functions to Build an Event-Driven Architecture</title><link href="https://marcoberlot1.github.io/marcoberlot1.github.io/blog/2022/leverage-aws-step-functions/" rel="alternate" type="text/html" title="How to Leverage AWS Step Functions to Build an Event-Driven Architecture" /><published>2022-11-20T17:03:20+00:00</published><updated>2022-11-20T17:03:20+00:00</updated><id>https://marcoberlot1.github.io/marcoberlot1.github.io/blog/2022/leverage-aws-step-functions</id><content type="html" xml:base="https://marcoberlot1.github.io/marcoberlot1.github.io/blog/2022/leverage-aws-step-functions/"><![CDATA[<h2 id="introduction">Introduction</h2>
 
 <p>Event-driven architectures have grown in popularity as they offer increased flexibility, scalability, and responsiveness to modern application demands. These architectures often involve numerous services and queues or message brokers, which can be challenging to manage. In this blog post, we’ll explore how AWS Step Functions can be a powerful tool for building and managing event-driven architectures through orchestration.</p>
 
@@ -48,13 +48,13 @@ In addition to being an orchestrator, Step Functions also provides the following
 
   <picture>
     
-    <source class="responsive-img-srcset" media="(max-width: 480px)" srcset="/al-folio/assets/img/stepfunction-1-480.webp" />
-    <source class="responsive-img-srcset" media="(max-width: 800px)" srcset="/al-folio/assets/img/stepfunction-1-800.webp" />
-    <source class="responsive-img-srcset" media="(max-width: 1400px)" srcset="/al-folio/assets/img/stepfunction-1-1400.webp" />
+    <source class="responsive-img-srcset" media="(max-width: 480px)" srcset="/marcoberlot1.github.io/assets/img/stepfunction-1-480.webp" />
+    <source class="responsive-img-srcset" media="(max-width: 800px)" srcset="/marcoberlot1.github.io/assets/img/stepfunction-1-800.webp" />
+    <source class="responsive-img-srcset" media="(max-width: 1400px)" srcset="/marcoberlot1.github.io/assets/img/stepfunction-1-1400.webp" />
     
 
     <!-- Fallback to the original file -->
-    <img src="/al-folio/assets/img/stepfunction-1.png" class="img-fluid rounded z-depth-1" width="auto" height="auto" data-zoomable="" onerror="this.onerror=null; $('.responsive-img-srcset').remove();" />
+    <img src="/marcoberlot1.github.io/assets/img/stepfunction-1.png" class="img-fluid rounded z-depth-1" width="auto" height="auto" data-zoomable="" onerror="this.onerror=null; $('.responsive-img-srcset').remove();" />
 
   </picture>
 
@@ -82,7 +82,7 @@ Cost. As with all cloud services, there is an associated expense, which can incr
 
 <h2 id="conclusion">Conclusion</h2>
 
-<p>Leveraging AWS Step Functions to build event-driven architectures offers a powerful way to manage and coordinate complex processes across multiple services. By using Step Functions as an orchestration tool, you can create robust, scalable, and easy-to-maintain systems, ensuring that your applications are responsive to the dynamic demands of the modern world.</p>]]></content><author><name></name></author><category term="technical" /><category term="aws" /><summary type="html"><![CDATA[Introducing AWS Step Functions as an Orchestration Tool]]></summary></entry><entry><title type="html">What Are Database Migrations and Why You Should Use Them</title><link href="https://alshedivat.github.io/al-folio/blog/2022/database-migrations/" rel="alternate" type="text/html" title="What Are Database Migrations and Why You Should Use Them" /><published>2022-09-20T17:03:20+00:00</published><updated>2022-09-20T17:03:20+00:00</updated><id>https://alshedivat.github.io/al-folio/blog/2022/database-migrations</id><content type="html" xml:base="https://alshedivat.github.io/al-folio/blog/2022/database-migrations/"><![CDATA[<h2 id="the-critical-role-of-database-migrations-in-software-development">The Critical Role of Database Migrations in Software Development</h2>
+<p>Leveraging AWS Step Functions to build event-driven architectures offers a powerful way to manage and coordinate complex processes across multiple services. By using Step Functions as an orchestration tool, you can create robust, scalable, and easy-to-maintain systems, ensuring that your applications are responsive to the dynamic demands of the modern world.</p>]]></content><author><name></name></author><category term="technical" /><category term="aws" /><summary type="html"><![CDATA[Introducing AWS Step Functions as an Orchestration Tool]]></summary></entry><entry><title type="html">What Are Database Migrations and Why You Should Use Them</title><link href="https://marcoberlot1.github.io/marcoberlot1.github.io/blog/2022/database-migrations/" rel="alternate" type="text/html" title="What Are Database Migrations and Why You Should Use Them" /><published>2022-09-20T17:03:20+00:00</published><updated>2022-09-20T17:03:20+00:00</updated><id>https://marcoberlot1.github.io/marcoberlot1.github.io/blog/2022/database-migrations</id><content type="html" xml:base="https://marcoberlot1.github.io/marcoberlot1.github.io/blog/2022/database-migrations/"><![CDATA[<h2 id="the-critical-role-of-database-migrations-in-software-development">The Critical Role of Database Migrations in Software Development</h2>
 
 <p>As the complexity of software systems has increased over time, so too has the intricacy of managing the foundational component of these systems. Databases are one of the most integral part of these systems. In this post, we’ll delve into the importance of using database migrations to track and control changes in your database schema, and why they serve as a vital tool in your software development lifecycle.</p>
 
@@ -116,13 +116,13 @@ Cost. As with all cloud services, there is an associated expense, which can incr
 
   <picture>
     
-    <source class="responsive-img-srcset" media="(max-width: 480px)" srcset="/al-folio/assets/img/migration-1-480.webp" />
-    <source class="responsive-img-srcset" media="(max-width: 800px)" srcset="/al-folio/assets/img/migration-1-800.webp" />
-    <source class="responsive-img-srcset" media="(max-width: 1400px)" srcset="/al-folio/assets/img/migration-1-1400.webp" />
+    <source class="responsive-img-srcset" media="(max-width: 480px)" srcset="/marcoberlot1.github.io/assets/img/migration-1-480.webp" />
+    <source class="responsive-img-srcset" media="(max-width: 800px)" srcset="/marcoberlot1.github.io/assets/img/migration-1-800.webp" />
+    <source class="responsive-img-srcset" media="(max-width: 1400px)" srcset="/marcoberlot1.github.io/assets/img/migration-1-1400.webp" />
     
 
     <!-- Fallback to the original file -->
-    <img src="/al-folio/assets/img/migration-1.png" class="img-fluid rounded z-depth-1" width="auto" height="auto" onerror="this.onerror=null; $('.responsive-img-srcset').remove();" />
+    <img src="/marcoberlot1.github.io/assets/img/migration-1.png" class="img-fluid rounded z-depth-1" width="auto" height="auto" onerror="this.onerror=null; $('.responsive-img-srcset').remove();" />
 
   </picture>
 
@@ -144,13 +144,13 @@ Cost. As with all cloud services, there is an associated expense, which can incr
 
   <picture>
     
-    <source class="responsive-img-srcset" media="(max-width: 480px)" srcset="/al-folio/assets/img/migration-2-480.webp" />
-    <source class="responsive-img-srcset" media="(max-width: 800px)" srcset="/al-folio/assets/img/migration-2-800.webp" />
-    <source class="responsive-img-srcset" media="(max-width: 1400px)" srcset="/al-folio/assets/img/migration-2-1400.webp" />
+    <source class="responsive-img-srcset" media="(max-width: 480px)" srcset="/marcoberlot1.github.io/assets/img/migration-2-480.webp" />
+    <source class="responsive-img-srcset" media="(max-width: 800px)" srcset="/marcoberlot1.github.io/assets/img/migration-2-800.webp" />
+    <source class="responsive-img-srcset" media="(max-width: 1400px)" srcset="/marcoberlot1.github.io/assets/img/migration-2-1400.webp" />
     
 
     <!-- Fallback to the original file -->
-    <img src="/al-folio/assets/img/migration-2.png" class="img-fluid rounded z-depth-1" width="auto" height="auto" onerror="this.onerror=null; $('.responsive-img-srcset').remove();" />
+    <img src="/marcoberlot1.github.io/assets/img/migration-2.png" class="img-fluid rounded z-depth-1" width="auto" height="auto" onerror="this.onerror=null; $('.responsive-img-srcset').remove();" />
 
   </picture>
 
@@ -180,4 +180,4 @@ Cost. As with all cloud services, there is an associated expense, which can incr
 
 <p>Rails Active Record Migrations: Similarly, if you’re working with Ruby on Rails, Active Record provides a powerful ORM tool, which includes migrations.</p>
 
-<p>Knex.js: For JavaScript applications, Knex.js is a popular choice.</p>]]></content><author><name></name></author><category term="technical" /><category term="databases" /><summary type="html"><![CDATA[The Critical Role of Database Migrations in Software Development]]></summary></entry><entry><title type="html">Displaying External Posts on Your al-folio Blog</title><link href="https://alshedivat.github.io/al-folio/blog/2022/displaying-external-posts-on-your-al-folio-blog/" rel="alternate" type="text/html" title="Displaying External Posts on Your al-folio Blog" /><published>2022-04-23T23:20:09+00:00</published><updated>2022-04-23T23:20:09+00:00</updated><id>https://alshedivat.github.io/al-folio/blog/2022/displaying-external-posts-on-your-al-folio-blog</id><content type="html" xml:base="https://alshedivat.github.io/al-folio/blog/2022/displaying-external-posts-on-your-al-folio-blog/"><![CDATA[]]></content><author><name></name></author></entry></feed>
+<p>Knex.js: For JavaScript applications, Knex.js is a popular choice.</p>]]></content><author><name></name></author><category term="technical" /><category term="databases" /><summary type="html"><![CDATA[The Critical Role of Database Migrations in Software Development]]></summary></entry><entry><title type="html">Displaying External Posts on Your al-folio Blog</title><link href="https://marcoberlot1.github.io/marcoberlot1.github.io/blog/2022/displaying-external-posts-on-your-al-folio-blog/" rel="alternate" type="text/html" title="Displaying External Posts on Your al-folio Blog" /><published>2022-04-23T23:20:09+00:00</published><updated>2022-04-23T23:20:09+00:00</updated><id>https://marcoberlot1.github.io/marcoberlot1.github.io/blog/2022/displaying-external-posts-on-your-al-folio-blog</id><content type="html" xml:base="https://marcoberlot1.github.io/marcoberlot1.github.io/blog/2022/displaying-external-posts-on-your-al-folio-blog/"><![CDATA[]]></content><author><name></name></author></entry></feed>
