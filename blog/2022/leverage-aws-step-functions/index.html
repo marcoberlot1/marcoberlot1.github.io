@@ -10,10 +10,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>2022 | Marco  Berlot</title>
+    <title>How to Leverage AWS Step Functions to Build an Event-Driven Architecture | Marco  Berlot</title>
     <meta name="author" content="Marco  Berlot">
-    <meta name="description" content="Personal Website of Computer Scientist Marco Berlot.
-">
+    <meta name="description" content="Introducing AWS Step Functions as an Orchestration Tool">
     <meta name="keywords" content="jekyll, jekyll-theme, academic-website, portfolio-website">
 
 
@@ -39,7 +38,7 @@
     <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%E2%9A%9B%EF%B8%8F&lt;/text&gt;&lt;/svg&gt;">
     
     <link rel="stylesheet" href="/al-folio/assets/css/main.css">
-    <link rel="canonical" href="https://alshedivat.github.io/al-folio/blog/2022/">
+    <link rel="canonical" href="https://alshedivat.github.io/al-folio/blog/2022/leverage-aws-step-functions/">
 
     <!-- Dark Mode -->
     
@@ -114,41 +113,140 @@
     <!-- Content -->
     <div class="container mt-5">
       
-        <div class="post">
+        <!-- _layouts/post.html -->
+
+<div class="post">
 
   <header class="post-header">
-    <h1 class="post-title"> <i class="fas fa-calendar fa-sm"></i> 2022 </h1>
-    <p class="post-description"> an archive of posts from this year </p>
+    <h1 class="post-title">How to Leverage AWS Step Functions to Build an Event-Driven Architecture</h1>
+    <p class="post-meta">November 20, 2022</p>
+    <p class="post-tags">
+      <a href="/al-folio/blog/2022"> <i class="fas fa-calendar fa-sm"></i> 2022 </a>
+        ·  
+        <a href="/al-folio/blog/tag/aws">
+          <i class="fas fa-hashtag fa-sm"></i> aws</a>  
+          
+        ·  
+        <a href="/al-folio/blog/category/technical">
+          <i class="fas fa-tag fa-sm"></i> technical</a>  
+          
+
+    </p>
   </header>
 
-  <article>
-    <div class="table-responsive">
-      <table class="table table-sm table-borderless">
-        
-        <tr>
-          <th scope="row">Nov 20, 2022</th>
-          <td>
-              <a class="post-link" href="/al-folio/blog/2022/leverage-aws-step-functions/">How to Leverage AWS Step Functions to Build an Event-Driven Architecture</a>
-          </td>
-        </tr>
-      
-        <tr>
-          <th scope="row">Sep 20, 2022</th>
-          <td>
-              <a class="post-link" href="/al-folio/blog/2022/database-migrations/">What Are Database Migrations and Why You Should Use Them</a>
-          </td>
-        </tr>
-      
-        <tr>
-          <th scope="row">Apr 23, 2022</th>
-          <td>
-              <a class="post-link" href="/al-folio/blog/2022/displaying-external-posts-on-your-al-folio-blog/">Displaying External Posts on Your al-folio Blog</a>
-          </td>
-        </tr>
-      
-      </table>
+  <article class="post-content">
+    
+    <div id="markdown-content">
+      <h2 id="introduction">Introduction</h2>
+
+<p>Event-driven architectures have grown in popularity as they offer increased flexibility, scalability, and responsiveness to modern application demands. These architectures often involve numerous services and queues or message brokers, which can be challenging to manage. In this blog post, we’ll explore how AWS Step Functions can be a powerful tool for building and managing event-driven architectures through orchestration.</p>
+
+<h2 id="section-1-event-driven-architectures---the-need-for-coreography-or-orchestration">Section 1: Event-Driven Architectures - The Need for Coreography or Orchestration</h2>
+
+<p>In event-driven architectures, multiple services interact with each other through events. To manage the processes and ensure that they function smoothly, there are two primary approaches: coreography and orchestration.</p>
+
+<ol>
+  <li>
+    <p><strong>Coreography</strong>: In this approach, each service is responsible for its own logic and decision-making. Services communicate with each other through events, and they make decisions based on the events they receive. This approach is more decentralized and requires less centralized management.</p>
+  </li>
+  <li>
+    <p><strong>Orchestration</strong>: In orchestration, a central conductor or orchestrator manages the flow of events and the decision-making process. The orchestrator is responsible for coordinating the different services and ensuring that the right events are processed at the right time. This approach offers a more centralized control over the event flow.</p>
+  </li>
+</ol>
+
+<h2 id="section-2-introducing-aws-step-functions-as-an-orchestration-tool">Section 2: Introducing AWS Step Functions as an Orchestration Tool</h2>
+
+<p>Now, there are both pros and cons for these approaches, but the point of this article is not to consider them, or evaluate how once can be better than the other given a certain context. We’re going to focus on the Orchestration approach, and see how AWS Step Functions can be a great tool to build a serverless orchestrator.</p>
+
+<p>AWS Step Functions is a serverless workflow service that enables you to create, coordinate, and manage complex processes across multiple services. It acts as an orchestrator, providing a way to coordinate and manage the flow of events in an event-driven architecture.
+In addition to being an orchestrator, Step Functions also provides the following features:</p>
+
+<ul>
+  <li>Visualize and define your workflows using a JSON-based language called the Amazon States Language.</li>
+  <li>Automatically handle retries and error handling.</li>
+  <li>Easily integrate with other AWS services such as AWS Lambda, Amazon SNS, and Amazon SQS.</li>
+  <li>Monitor and track the execution of your workflows in real-time.</li>
+</ul>
+
+<h2 id="section-3-example---building-an-event-driven-architecture-with-aws-step-functions">Section 3: Example - Building an Event-Driven Architecture with AWS Step Functions</h2>
+
+<p>To better understand how AWS Step Functions can be employed in an event-driven architecture, let’s walk through a simple example. Imagine you’re building an online retail store and need to process client orders coming from the web application. To simplify, let’s assume the following steps must occur:</p>
+
+<ol>
+  <li>Upon receiving an order, you need to process the payment.</li>
+  <li>After payment is processed, the system should place the item “on hold,” ensuring that no one else can purchase it.</li>
+  <li>Finally, the system must initiate the shipping process for the item.</li>
+</ol>
+
+<p>Now, let’s envision that we have three separate services to handle these tasks: one for payments, one for updating the item’s status, and one for managing the shipping process. Each service reads incoming events from a queue. What we can create is a Step Functions workflow that sends one message per step to the respective queue for each service. Refer to the example from the Step Functions workflow editor below:</p>
+
+<div class="row mt-3">
+    <div class="col-sm mt-3 mt-md-0">
+        <figure>
+
+  <picture>
+    
+    <source class="responsive-img-srcset" media="(max-width: 480px)" srcset="/al-folio/assets/img/stepfunction-1-480.webp"></source>
+    <source class="responsive-img-srcset" media="(max-width: 800px)" srcset="/al-folio/assets/img/stepfunction-1-800.webp"></source>
+    <source class="responsive-img-srcset" media="(max-width: 1400px)" srcset="/al-folio/assets/img/stepfunction-1-1400.webp"></source>
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/al-folio/assets/img/stepfunction-1.png" class="img-fluid rounded z-depth-1" width="auto" height="auto" data-zoomable="" onerror="this.onerror=null; $('.responsive-img-srcset').remove();">
+
+  </picture>
+
+</figure>
+
+    </div>
+</div>
+
+<p>With this simple approach we got a lot out of the box:</p>
+
+<ul>
+  <li>We guarantee that if one step fails, we’re not going to proceed to the next step. For example, if we can’t process the payment, we’re not going to proceed and update the status of the item. (This only applies if the operation the service is performing is a synchronous operation)</li>
+  <li>We can visualize all the workflows, and see when/how they fail</li>
+  <li>Serverless and highly scalable</li>
+</ul>
+
+<p>You can easily see how this can be extremely useful with more complex scenarios, that involve more services and longer workflows.</p>
+
+<h2 id="cons-of-using-step-functions">Cons of using Step Functions</h2>
+
+<p>Now let’s discuss some of the primary drawbacks of using Step Functions. In my opinion, there are two significant disadvantages:</p>
+
+<p>Step Functions cannot scale indefinitely. There is a limit to the number of state transitions per second allowed on your AWS account. This number depends on the type of workflows you’re employing, but it can be a constraint.
+Cost. As with all cloud services, there is an associated expense, which can increase significantly at a higher scale.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>Leveraging AWS Step Functions to build event-driven architectures offers a powerful way to manage and coordinate complex processes across multiple services. By using Step Functions as an orchestration tool, you can create robust, scalable, and easy-to-maintain systems, ensuring that your applications are responsive to the dynamic demands of the modern world.</p>
+
     </div>
   </article>
+
+
+  
+    
+    <br>
+    <hr>
+    <br>
+    <ul class="list-disc pl-8"></ul>
+
+    <!-- Adds related posts to the end of an article -->
+    <h2 class="text-3xl font-semibold mb-4 mt-12">Enjoy Reading This Article?</h2>
+    <p class="mb-2">Here are some more articles you might like to read next:</p>
+  
+
+  <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/al-folio/blog/2022/displaying-external-posts-on-your-al-folio-blog/">Displaying External Posts on Your al-folio Blog</a>
+  </li>
+
+  
+
+  <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/al-folio/blog/2022/database-migrations/">What Are Database Migrations and Why You Should Use Them</a>
+  </li>
 
 </div>
 

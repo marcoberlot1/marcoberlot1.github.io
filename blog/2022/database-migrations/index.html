@@ -10,10 +10,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>2022 | Marco  Berlot</title>
+    <title>What Are Database Migrations and Why You Should Use Them | Marco  Berlot</title>
     <meta name="author" content="Marco  Berlot">
-    <meta name="description" content="Personal Website of Computer Scientist Marco Berlot.
-">
+    <meta name="description" content="The Critical Role of Database Migrations in Software Development">
     <meta name="keywords" content="jekyll, jekyll-theme, academic-website, portfolio-website">
 
 
@@ -39,7 +38,7 @@
     <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%E2%9A%9B%EF%B8%8F&lt;/text&gt;&lt;/svg&gt;">
     
     <link rel="stylesheet" href="/al-folio/assets/css/main.css">
-    <link rel="canonical" href="https://alshedivat.github.io/al-folio/blog/2022/">
+    <link rel="canonical" href="https://alshedivat.github.io/al-folio/blog/2022/database-migrations/">
 
     <!-- Dark Mode -->
     
@@ -114,41 +113,155 @@
     <!-- Content -->
     <div class="container mt-5">
       
-        <div class="post">
+        <!-- _layouts/post.html -->
+
+<div class="post">
 
   <header class="post-header">
-    <h1 class="post-title"> <i class="fas fa-calendar fa-sm"></i> 2022 </h1>
-    <p class="post-description"> an archive of posts from this year </p>
+    <h1 class="post-title">What Are Database Migrations and Why You Should Use Them</h1>
+    <p class="post-meta">September 20, 2022</p>
+    <p class="post-tags">
+      <a href="/al-folio/blog/2022"> <i class="fas fa-calendar fa-sm"></i> 2022 </a>
+        ·  
+        <a href="/al-folio/blog/tag/databases">
+          <i class="fas fa-hashtag fa-sm"></i> databases</a>  
+          
+        ·  
+        <a href="/al-folio/blog/category/technical">
+          <i class="fas fa-tag fa-sm"></i> technical</a>  
+          
+
+    </p>
   </header>
 
-  <article>
-    <div class="table-responsive">
-      <table class="table table-sm table-borderless">
-        
-        <tr>
-          <th scope="row">Nov 20, 2022</th>
-          <td>
-              <a class="post-link" href="/al-folio/blog/2022/leverage-aws-step-functions/">How to Leverage AWS Step Functions to Build an Event-Driven Architecture</a>
-          </td>
-        </tr>
-      
-        <tr>
-          <th scope="row">Sep 20, 2022</th>
-          <td>
-              <a class="post-link" href="/al-folio/blog/2022/database-migrations/">What Are Database Migrations and Why You Should Use Them</a>
-          </td>
-        </tr>
-      
-        <tr>
-          <th scope="row">Apr 23, 2022</th>
-          <td>
-              <a class="post-link" href="/al-folio/blog/2022/displaying-external-posts-on-your-al-folio-blog/">Displaying External Posts on Your al-folio Blog</a>
-          </td>
-        </tr>
-      
-      </table>
+  <article class="post-content">
+    
+    <div id="markdown-content">
+      <h2 id="the-critical-role-of-database-migrations-in-software-development">The Critical Role of Database Migrations in Software Development</h2>
+
+<p>As the complexity of software systems has increased over time, so too has the intricacy of managing the foundational component of these systems. Databases are one of the most integral part of these systems. In this post, we’ll delve into the importance of using database migrations to track and control changes in your database schema, and why they serve as a vital tool in your software development lifecycle.</p>
+
+<h2 id="the-issue-in-not-tracking-the-database-schema">The Issue in Not Tracking the Database Schema</h2>
+
+<p>The state of your database is critical to the operation of your software. Imagine a database as a warehouse where your application stores and retrieves its data. The warehouse needs to be organized in a certain way for the application to work properly. This organization, in terms of a database, is the schema.</p>
+
+<p>If you aren’t properly tracking changes to this schema, you can end up with a myriad of issues. For instance, a new feature might require a change in the database schema, which, if not managed properly, could cause inconsistencies between environments. An example of such inconsistency would be a feature working perfectly fine in the development environment, but failing in the production environment due to a schema discrepancy.</p>
+
+<p>This lack of control and visibility can lead to bugs, system downtime, data loss, and significant issues during scaling, not to mention the time and resources spent on troubleshooting and resolving these issues.</p>
+
+<p>I’ve seen several companies running databases in production, without a schema versioning system, for which, no one really knew what was the latest status of the database. The only way for you to know was to go and actually check the schemas of the tables in production.</p>
+
+<h2 id="migrations-a-functional-and-elegant-solution">Migrations: A Functional and Elegant Solution</h2>
+
+<p>Database migrations provide a functional and elegant solution to these challenges. A database migration is essentially a set of instructions that makes changes to the database schema, such as creating a table, adding a column, or updating data within the table.</p>
+
+<p>Database migrations are version-controlled, which means that they not only track the changes but also the sequence in which they were made. This enables you to replicate your database schema in a new environment reliably and accurately, or roll back changes if something goes wrong.</p>
+
+<p>In essence, database migrations bring predictability, visibility, and control to your database management, while facilitating collaboration between team members.</p>
+
+<h2 id="a-practical-example">A Practical Example</h2>
+
+<p>To illustrate the concept, consider a scenario where we are developing a blog platform. Initially, we create a Posts table with columns title and body. After some time, we decide to add a feature to like a post. For this, we need a new column likes in the Posts table.</p>
+
+<p>Instead of manually adding this column in every environment, we write a migration. This migration contains instructions to alter the Posts table and add the likes column.</p>
+
+<div class="row mt-3">
+    <div class="col-sm mt-3 mt-md-0">
+        <figure>
+
+  <picture>
+    
+    <source class="responsive-img-srcset" media="(max-width: 480px)" srcset="/al-folio/assets/img/migration-1-480.webp"></source>
+    <source class="responsive-img-srcset" media="(max-width: 800px)" srcset="/al-folio/assets/img/migration-1-800.webp"></source>
+    <source class="responsive-img-srcset" media="(max-width: 1400px)" srcset="/al-folio/assets/img/migration-1-1400.webp"></source>
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/al-folio/assets/img/migration-1.png" class="img-fluid rounded z-depth-1" width="auto" height="auto" onerror="this.onerror=null; $('.responsive-img-srcset').remove();">
+
+  </picture>
+
+</figure>
+
+    </div>
+</div>
+<div class="caption">
+    A simple, elegant caption looks good between image rows, after each row, or doesn't have to be there at all.
+</div>
+
+<p>We then run this migration in each environment (development, testing, production), ensuring the database schema is consistent across all of them.</p>
+
+<p>Now, our database schema is built based off the two migrations you can see below. This means that simply from the code we can know what the schema looks like for each version, without the need to go and check our database</p>
+
+<div class="row mt-3">
+    <div class="col-sm mt-3 mt-md-0">
+        <figure>
+
+  <picture>
+    
+    <source class="responsive-img-srcset" media="(max-width: 480px)" srcset="/al-folio/assets/img/migration-2-480.webp"></source>
+    <source class="responsive-img-srcset" media="(max-width: 800px)" srcset="/al-folio/assets/img/migration-2-800.webp"></source>
+    <source class="responsive-img-srcset" media="(max-width: 1400px)" srcset="/al-folio/assets/img/migration-2-1400.webp"></source>
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/al-folio/assets/img/migration-2.png" class="img-fluid rounded z-depth-1" width="auto" height="auto" onerror="this.onerror=null; $('.responsive-img-srcset').remove();">
+
+  </picture>
+
+</figure>
+
+    </div>
+</div>
+<div class="caption">
+    A simple, elegant caption looks good between image rows, after each row, or doesn't have to be there at all.
+</div>
+
+<p>If, in the future, we decide to remove this feature, we can simply write another migration to remove the likes column.</p>
+
+<h2 id="integration-tests-an-additional-benefit">Integration Tests: An Additional Benefit</h2>
+
+<p>Suppose we need to conduct a minor integration test involving a method that interacts with our database. Leveraging migrations simplifies this process immensely. We can effortlessly spin up a local database container and construct its schema using these migrations. Consequently, the test will always incorporate the latest schema changes. If a new migration is introduced into the main branch, the test will also incorporate that migration when spinning up the local container.</p>
+
+<h2 id="common-migration-frameworks">Common Migration Frameworks</h2>
+
+<p>There are many robust migration frameworks available that support various languages and databases. Here are a few:</p>
+
+<p>Flyway: This is a popular choice for Java-based applications, though it does offer command-line tools for non-Java applications. It’s easy to set up and supports both SQL-based and Java-based migrations.</p>
+
+<p>Liquibase: Another strong contender, particularly for complex database schemas. Liquibase supports XML, YAML, JSON, and SQL format migrations and offers robust rollbacks.</p>
+
+<p>Django Migrations: If you’re working with Django (a Python web framework), Django’s migrations are baked right into the framework and are easy to work with.</p>
+
+<p>Rails Active Record Migrations: Similarly, if you’re working with Ruby on Rails, Active Record provides a powerful ORM tool, which includes migrations.</p>
+
+<p>Knex.js: For JavaScript applications, Knex.js is a popular choice.</p>
+
     </div>
   </article>
+
+
+  
+    
+    <br>
+    <hr>
+    <br>
+    <ul class="list-disc pl-8"></ul>
+
+    <!-- Adds related posts to the end of an article -->
+    <h2 class="text-3xl font-semibold mb-4 mt-12">Enjoy Reading This Article?</h2>
+    <p class="mb-2">Here are some more articles you might like to read next:</p>
+  
+
+  <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/al-folio/blog/2022/displaying-external-posts-on-your-al-folio-blog/">Displaying External Posts on Your al-folio Blog</a>
+  </li>
+
+  
+
+  <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/al-folio/blog/2022/leverage-aws-step-functions/">How to Leverage AWS Step Functions to Build an Event-Driven Architecture</a>
+  </li>
 
 </div>
 
