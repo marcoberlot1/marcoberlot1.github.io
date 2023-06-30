@@ -2,24 +2,23 @@
 <html lang="en">
 
   <!-- Head -->
-  <head>    <!-- Metadata, OpenGraph and Schema.org -->
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">    <!-- Metadata, OpenGraph and Schema.org -->
     
 
     <!-- Standard metadata -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>
-        blog | Marco  Berlot</title>
-    <meta name="author" content="Marco  Berlot" />
-    <meta name="description" content="Personal Website of Computer Scientist Marco Berlot.
-" />
-    <meta name="keywords" content="jekyll, jekyll-theme, academic-website, portfolio-website" />
+    <title>Why and when to use Time Series Databases | Marco  Berlot</title>
+    <meta name="author" content="Marco  Berlot">
+    <meta name="description" content="A quick intro to time series data and technologies">
+    <meta name="keywords" content="jekyll, jekyll-theme, academic-website, portfolio-website">
 
 
     <!-- Bootstrap & MDB -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-DF7Zhf293AJxJNTmh5zhoYYIMs2oXitRfBjY+9L//AY=" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.20.0/css/mdb.min.css" integrity="sha256-jpjYvU3G3N6nrrBwXJoVEYI/0zw8htfFnhT9ljN3JJw=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.20.0/css/mdb.min.css" integrity="sha256-jpjYvU3G3N6nrrBwXJoVEYI/0zw8htfFnhT9ljN3JJw=" crossorigin="anonymous">
 
     <!-- Bootstrap Table -->
     <link defer rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.21.4/dist/bootstrap-table.min.css">
@@ -30,20 +29,20 @@
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons">
 
     <!-- Code Syntax Highlighting -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jwarby/jekyll-pygments-themes@master/github.css" media="" id="highlight_theme_light" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jwarby/jekyll-pygments-themes@master/github.css" media="" id="highlight_theme_light">
 
     
 
     <!-- Styles -->
     
-    <link rel="shortcut icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚛️</text></svg>">
+    <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%E2%9A%9B%EF%B8%8F&lt;/text&gt;&lt;/svg&gt;">
     
     <link rel="stylesheet" href="/assets/css/main.css">
-    <link rel="canonical" href="https://marcoberlot1.github.io/blog/">
+    <link rel="canonical" href="https://marcoberlot1.github.io/blog/2022/what-are-time-series-databases/">
 
     <!-- Dark Mode -->
     
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jwarby/jekyll-pygments-themes@master/native.css" media="none" id="highlight_theme_dark" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jwarby/jekyll-pygments-themes@master/native.css" media="none" id="highlight_theme_dark">
 
     <script src="/assets/js/theme.js"></script>
     <script src="/assets/js/dark_mode.js"></script>
@@ -60,7 +59,7 @@
       <!-- Nav Bar -->
       <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top">
         <div class="container">
-          <a class="navbar-brand title font-weight-lighter" href="/"><span class="font-weight-bold">Marco&nbsp;</span>Berlot</a>
+          <a class="navbar-brand title font-weight-lighter" href="/"><span class="font-weight-bold">Marco </span>Berlot</a>
           <!-- Navbar Toggle -->
           <button class="navbar-toggler collapsed ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="sr-only">Toggle navigation</span>
@@ -108,157 +107,100 @@
     <!-- Content -->
     <div class="container mt-5">
       
-        <div class="post">
+        <!-- _layouts/post.html -->
+
+<div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Why and when to use Time Series Databases</h1>
+    <p class="post-meta">November 20, 2022</p>
+    <p class="post-tags">
+      <a href="/blog/2022"> <i class="fas fa-calendar fa-sm"></i> 2022 </a>
+        ·  
+        <a href="/blog/tag/aws">
+          <i class="fas fa-hashtag fa-sm"></i> aws</a>  
+          
+        ·  
+        <a href="/blog/category/technical">
+          <i class="fas fa-tag fa-sm"></i> technical</a>  
+          
+
+    </p>
+  </header>
+
+  <article class="post-content">
+    
+    <div id="markdown-content">
+      <h1 id="why-and-when-to-use-time-series-databases">Why and when to use Time Series Databases</h1>
+
+<p><img src="https://www.imsl.com/sites/default/files/image/2020-07/image-blog-time-series-analysis.jpg" alt="enter image description here"></p>
+
+<h2 id="a-common-scenario">A common scenario</h2>
+
+<p>Imagine that you’re building a trading platform. Your software processes millions of orders a day. One key feature you need to build is an api to access the prices of these trades. You need to be able to return the prices for a given stock, over a particular time frame.
+Additionally you might need to return an aggregate of the results, such as the weekly price for a given stock over a period of 12 months. Or potentially a more complex use case, such as “the highest price of each day over a period of 6 months”.
+When you think about the fact that this api will be used in several UIs to build very complex graphs you can easily see how storing these data in the right format is key to the success of this feature. And we just mentioned what the api needs to returns, but of course we need to think about scalability, performance and cost. What I gave you is a simple example, but it can translate into several use cases. From data acquired through sensors that need to be visualized through dashboards and graphs, all the way to scientific use cases that need to deal with million of data points that describe events over time (think of number of covid cases in each city in a given country)
+Well, all of these, are perfect use case for time series databases</p>
+
+<h2 id="first-things-first-whats-a-time-series">First things first: What’s a time series?</h2>
+
+<p>Think of time series as data that exists exclusively in relation to time. For instance, a trade price only holds meaning when accompanied by a specific point in time. If I told you, this Google stock is worth $100, you might assume, this is the <em>latest</em> price, or maybe the <em>average</em> price of this week. But without giving the time relation, this data point doesn’t hold any meaning.
+This is different if we compare this case to, for example, data about the account of a user. The name, email, address of a user have their own meaning, even without the concept of time.
+Another crucial attribute of time series data is its immutability; once recorded, it typically remains unaltered. The price of a google stock a week ago, will always be the same. Same thing for the number of covid cases in NYC January 1st 2021.</p>
+
+<p>Now, if you think about this, we’re already describing a dataset that holds some unique properties:</p>
+
+<ul>
+  <li>Data immutability over time</li>
+  <li>Each point exists in relation with a timestamp</li>
+</ul>
+
+<p>These are exactly the two properties that time series technology use to build an ad hoc solution that allows the storing and retrieval of this data in a much more optimized way compared to traditional SQL databases.</p>
+
+<h2 id="how-do-time-series-databases-work">How do Time Series Databases Work?</h2>
+
+<p>As we mentioned, time series databases are engines optimized to store, manage, and query time series data. These technologies offer several advantages over a traditional SQL database:</p>
+
+<ul>
+  <li>
+    <p><strong>Time series databases are easier to scale.</strong> With time series databases we get partitioning out of the box. Forget about sharding, or similar techniques, thanks to the fact that each record is associated with a specific time stamp, it’s much easier for the database to manage the partitions for us. If you’re unfamiliar with partitions, think of a partitioned database as a very well organized set of files. The more the database grows, the more file it needs to hold all the records. The hard thing about this process is, how do you divide records across these files? You might need a key, or an id, to group them, so that records with the same key, can be found in the same file. The great thing about time series, is that they do not need this key, because they all have a timestamp. So you can imagine each of these files as a group of dates (such as all the records of a given month, day or week)</p>
+  </li>
+  <li>
+    <p><strong>Time series databases can have different storage layers based on the timestamp.</strong> Newer records may be cached in memory, older records can be stored on disks, and the oldest records can be saved directly on a file. Several time series technology offer these type of configurations, and they end up in better performance and reduced cost.</p>
+  </li>
+  <li><strong>They facilitate support for rollups.</strong></li>
+  <li>
+    <p>(This is an extensive topic, so I’ll just share a resource: **[https://www.sqlservertutorial.net/sql-server-basics/sql-server-rollup/<strong>](https://www.sqlservertutorial.net/sql-server-basics/sql-server-rollup/</strong>))</p>
+  </li>
+  <li>
+<strong>They support horizontal compression of data.</strong> (Similar to sound compression algorithms, time series databases store the differences between consecutive data points rather than the actual values. This approach can save up to 90% of storage costs. More info: **[https://www.timescale.com/blog/time-series-compression-algorithms-explained/<strong>](https://www.timescale.com/blog/time-series-compression-algorithms-explained/</strong>))</li>
+</ul>
+
+    </div>
+  </article>
+
 
   
+    
+    <br>
+    <hr>
+    <br>
+    <ul class="list-disc pl-8"></ul>
+
+    <!-- Adds related posts to the end of an article -->
+    <h2 class="text-3xl font-semibold mb-4 mt-12">Enjoy Reading This Article?</h2>
+    <p class="mb-2">Here are some more articles you might like to read next:</p>
   
 
-  
-  <div class="header-bar">
-    <h1>cogitatĭo</h1>
-    <h2>A peek into my personal notes & thoughts</h2>
-  </div>
-  
+  <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2022/leverage-aws-step-functions/">How to Leverage AWS Step Functions to Build an Event-Driven Architecture</a>
+  </li>
 
   
-  <div class="tag-list">
-    <ul class="p-0 m-0">
-      
-        <li>
-          <i class="fas fa-hashtag fa-sm"></i> <a href="/blog/tag/technical">technical</a>
-        </li>
-        
-          <p>&bull;</p>
-        
-      
-        <li>
-          <i class="fas fa-hashtag fa-sm"></i> <a href="/blog/tag/opinions">opinions</a>
-        </li>
-        
-      
-    </ul>
-  </div>
-  
 
-  <ul class="post-list">
-    
-
-    
-    
-    
-    
-
-    <li><h3>
-        
-          <a class="post-title" href="/blog/2022/what-are-time-series-databases/">Why and when to use Time Series Databases</a>
-        
-      </h3>
-      <p>A quick intro to time series data and technologies</p>
-      <p class="post-meta">
-        5 min read &nbsp; &middot; &nbsp;
-        November 20, 2022
-      </p>
-      <p class="post-tags">
-        <a href="/blog/2022">
-          <i class="fas fa-calendar fa-sm"></i> 2022 </a>
-
-          
-          &nbsp; &middot; &nbsp;
-            
-            <a href="/blog/tag/aws">
-              <i class="fas fa-hashtag fa-sm"></i> aws</a> &nbsp;
-              
-          
-
-          
-          &nbsp; &middot; &nbsp;
-            
-            <a href="/blog/category/technical">
-              <i class="fas fa-tag fa-sm"></i> technical</a> &nbsp;
-              
-          
-    </p></li>
-
-    
-
-    
-    
-    
-    
-
-    <li><h3>
-        
-          <a class="post-title" href="/blog/2022/leverage-aws-step-functions/">How to Leverage AWS Step Functions to Build an Event-Driven Architecture</a>
-        
-      </h3>
-      <p>Introducing AWS Step Functions as an Orchestration Tool</p>
-      <p class="post-meta">
-        5 min read &nbsp; &middot; &nbsp;
-        November 20, 2022
-      </p>
-      <p class="post-tags">
-        <a href="/blog/2022">
-          <i class="fas fa-calendar fa-sm"></i> 2022 </a>
-
-          
-          &nbsp; &middot; &nbsp;
-            
-            <a href="/blog/tag/aws">
-              <i class="fas fa-hashtag fa-sm"></i> aws</a> &nbsp;
-              
-          
-
-          
-          &nbsp; &middot; &nbsp;
-            
-            <a href="/blog/category/technical">
-              <i class="fas fa-tag fa-sm"></i> technical</a> &nbsp;
-              
-          
-    </p></li>
-
-    
-
-    
-    
-    
-    
-
-    <li><h3>
-        
-          <a class="post-title" href="/blog/2022/database-migrations/">What Are Database Migrations and Why You Should Use Them</a>
-        
-      </h3>
-      <p>The Critical Role of Database Migrations in Software Development</p>
-      <p class="post-meta">
-        6 min read &nbsp; &middot; &nbsp;
-        September 20, 2022
-      </p>
-      <p class="post-tags">
-        <a href="/blog/2022">
-          <i class="fas fa-calendar fa-sm"></i> 2022 </a>
-
-          
-          &nbsp; &middot; &nbsp;
-            
-            <a href="/blog/tag/databases">
-              <i class="fas fa-hashtag fa-sm"></i> databases</a> &nbsp;
-              
-          
-
-          
-          &nbsp; &middot; &nbsp;
-            
-            <a href="/blog/category/technical">
-              <i class="fas fa-tag fa-sm"></i> technical</a> &nbsp;
-              
-          
-    </p></li>
-
-    
-  </ul>
-
-  
+  <li class="my-2">
+    <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/blog/2022/database-migrations/">What Are Database Migrations and Why You Should Use Them</a>
+  </li>
 
 </div>
 
@@ -268,7 +210,7 @@
     <!-- Footer -->    
     <footer class="fixed-bottom">
       <div class="container mt-0">
-        &copy; Copyright 2023 Marco  Berlot. 
+        © Copyright 2023 Marco  Berlot. 
       </div>
     </footer>
 
