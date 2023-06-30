@@ -1,12 +1,3 @@
----
-layout: post
-title: "Why and when to use Time Series Databases"
-date: 2022-11-20T09:03:20-08:00
-tags: aws
-description: A quick intro to time series data and technologies
-categories: technical
----
-
 # Why and when to use Time Series Databases
 
 ![enter image description here](https://www.imsl.com/sites/default/files/image/2020-07/image-blog-time-series-analysis.jpg)
@@ -19,6 +10,8 @@ When you think about the fact that this api will be used in several UIs to build
 Well, all of these, are perfect use case for time series databases
 
 ## First things first: What's a time series?
+
+![enter image description here](https://lh4.googleusercontent.com/OVnEMWIFN_bwoyiEGYu2xsFdTuG9pF4sR4k4-CTx9EN7zZ5Ee47dSWjaWwg4gLqchJoB7no18KEpxVXcaAAKvrVpuq_82lEoMj6D0Dg7gIxXNoiZ7kbEgMN81OA8ySNJArYGirhqYCTB1M9B_vC-jKvaNDCOZqEnNBq-j9OkZDCWRQhqMBZfSdr8vg)
 
 Think of time series as data that exists exclusively in relation to time. For instance, a trade price only holds meaning when accompanied by a specific point in time. If I told you, this Google stock is worth $100, you might assume, this is the _latest_ price, or maybe the _average_ price of this week. But without giving the time relation, this data point doesn't hold any meaning.
 This is different if we compare this case to, for example, data about the account of a user. The name, email, address of a user have their own meaning, even without the concept of time.
@@ -40,6 +33,21 @@ As we mentioned, time series databases are engines optimized to store, manage, a
 - **Time series databases can have different storage layers based on the timestamp.** Newer records may be cached in memory, older records can be stored on disks, and the oldest records can be saved directly on a file. Several time series technology offer these type of configurations, and they end up in better performance and reduced cost.
 
 - **They facilitate support for rollups.**
-- (This is an extensive topic, so I'll just share a resource: **[https://www.sqlservertutorial.net/sql-server-basics/sql-server-rollup/**](https://www.sqlservertutorial.net/sql-server-basics/sql-server-rollup/**))
+  Explaining rollups in depth in this article would be out of scope. But think of them as a way of aggregating data into smaller samples. For example, thinking about our trade prices: we might store thousands of trades a day. But we need to have an api that returns just the average price for each day. Instead of calculating the average price at query time, a better approach would be to pre-aggregate those averages in a different table. This pre-aggregation process is not always trivial, but most timeseries technologies have great features to support that, such as [Timestream Scheduled Queries](https://docs.aws.amazon.com/timestream/latest/developerguide/scheduledqueries.html) or [Timescales continuous aggregates](https://docs.timescale.com/use-timescale/latest/continuous-aggregates/hierarchical-continuous-aggregates/)
 
-- **They support horizontal compression of data.** (Similar to sound compression algorithms, time series databases store the differences between consecutive data points rather than the actual values. This approach can save up to 90% of storage costs. More info: **[https://www.timescale.com/blog/time-series-compression-algorithms-explained/**](https://www.timescale.com/blog/time-series-compression-algorithms-explained/**))
+- **Data Compression**
+  Similar to sound compression algorithms, time series databases can store the difference between consecutive data points rather than the actual values. Leveraging this intuition most time series technology use [state of the art compression algorithm](https://www.timescale.com/blog/time-series-compression-algorithms-explained/). To give you an idea, some timescale db customers claimed to have saved up [to 94% of](https://www.timescale.com/features/compression) storage thanks to compression. You can imagine, how this can have a huge impact on costs.
+
+- **Ad Hoc Functions to Manipulate Time**
+  Timeseries have a much better support to handle queries that deal with time, compared to traditional SQL databases. A non exhaustive list includes: interpolation, date extration, and support for several time formats. You can get an idea by taking a look at [Timestream's date/time functions](https://docs.aws.amazon.com/timestream/latest/developerguide/date-time-functions.html) [and InfluxDB time functions](https://docs.influxdata.com/influxdb/cloud-serverless/reference/sql/functions/time-and-date/)
+
+## When Should You Use a Time Series Database
+
+Now that we've gone through how time series databases work and the use cases they solve, the question of "when should you use it", it pretty straightforward.
+If you're dealing with time series data, and you expect to deal with one or more of the following use cases:
+
+- Extracting data over specific period of times
+- Aggregations of those data into different time frames
+- Need to scale
+
+Then you should definitely consider using one of them.
