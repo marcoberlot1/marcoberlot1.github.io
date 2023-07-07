@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html><body>
+<h1 id="why-and-when-to-use-time-series-databases">Why and when to use Time Series Databases</h1>
+
+<p><img src="https://www.imsl.com/sites/default/files/image/2020-07/image-blog-time-series-analysis.jpg" alt="enter image description here"></p>
+
+<h2 id="a-common-scenario">A common scenario</h2>
+
+<p>Imagine that you’re building a trading platform. Your software processes millions of orders a day. One key feature you need to build is an api to access the prices of these trades. You need to be able to return the prices for a given stock, over a particular time frame.
+Additionally you might need to return an aggregate of the results, such as the weekly price for a given stock over a period of 12 months. Or potentially a more complex use case, such as “the highest price of each day over a period of 6 months”.
+When you think about the fact that this api will be used in several UIs to build very complex graphs you can easily see how storing these data in the right format is key to the success of this feature. And we just mentioned what the api needs to returns, but of course we need to think about scalability, performance and cost. What I gave you is a simple example, but it can translate into several use cases. From data acquired through sensors that need to be visualized through dashboards and graphs, all the way to scientific use cases that need to deal with million of data points that describe events over time (think of number of covid cases in each city in a given country)
+Well, all of these, are perfect use case for time series databases</p>
+
+<h2 id="first-things-first-whats-a-time-series">First things first: What’s a time series?</h2>
+
+<p><img src="https://lh4.googleusercontent.com/OVnEMWIFN_bwoyiEGYu2xsFdTuG9pF4sR4k4-CTx9EN7zZ5Ee47dSWjaWwg4gLqchJoB7no18KEpxVXcaAAKvrVpuq_82lEoMj6D0Dg7gIxXNoiZ7kbEgMN81OA8ySNJArYGirhqYCTB1M9B_vC-jKvaNDCOZqEnNBq-j9OkZDCWRQhqMBZfSdr8vg" alt="enter image description here"></p>
+
+<p>Think of time series as data that exists exclusively in relation to time. For instance, a trade price only holds meaning when accompanied by a specific point in time. If I told you, this Google stock is worth $100, you might assume, this is the <em>latest</em> price, or maybe the <em>average</em> price of this week. But without giving the time relation, this data point doesn’t hold any meaning.
+This is different if we compare this case to, for example, data about the account of a user. The name, email, address of a user have their own meaning, even without the concept of time.
+Another crucial attribute of time series data is its immutability; once recorded, it typically remains unaltered. The price of a google stock a week ago, will always be the same. Same thing for the number of covid cases in NYC January 1st 2021.</p>
+
+<p>Now, if you think about this, we’re already describing a dataset that holds some unique properties:</p>
+
+<ul>
+  <li>Data immutability over time</li>
+  <li>Each point exists in relation with a timestamp</li>
+</ul>
+
+<p>These are exactly the two properties that time series technology use to build an ad hoc solution that allows the storing and retrieval of this data in a much more optimized way compared to traditional SQL databases.</p>
+
+<h2 id="how-do-time-series-databases-work">How do Time Series Databases Work?</h2>
+
+<p>As we mentioned, time series databases are engines optimized to store, manage, and query time series data. These technologies offer several advantages over a traditional SQL database:</p>
+
+<ul>
+  <li>
+    <p><strong>Time series databases are easier to scale.</strong> With time series databases we get partitioning out of the box. Forget about sharding, or similar techniques, thanks to the fact that each record is associated with a specific time stamp, it’s much easier for the database to manage the partitions for us. If you’re unfamiliar with partitions, think of a partitioned database as a very well organized set of files. The more the database grows, the more file it needs to hold all the records. The hard thing about this process is, how do you divide records across these files? You might need a key, or an id, to group them, so that records with the same key, can be found in the same file. The great thing about time series, is that they do not need this key, because they all have a timestamp. So you can imagine each of these files as a group of dates (such as all the records of a given month, day or week)</p>
+  </li>
+  <li>
+    <p><strong>Time series databases can have different storage layers based on the timestamp.</strong> Newer records may be cached in memory, older records can be stored on disks, and the oldest records can be saved directly on a file. Several time series technology offer these type of configurations, and they end up in better performance and reduced cost.</p>
+  </li>
+  <li>
+    <p><strong>They facilitate support for rollups.</strong>
+Explaining rollups in depth in this article would be out of scope. But think of them as a way of aggregating data into smaller samples. For example, thinking about our trade prices: we might store thousands of trades a day. But we need to have an api that returns just the average price for each day. Instead of calculating the average price at query time, a better approach would be to pre-aggregate those averages in a different table. This pre-aggregation process is not always trivial, but most timeseries technologies have great features to support that, such as <a href="https://docs.aws.amazon.com/timestream/latest/developerguide/scheduledqueries.html" rel="external nofollow noopener" target="_blank">Timestream Scheduled Queries</a> or <a href="https://docs.timescale.com/use-timescale/latest/continuous-aggregates/hierarchical-continuous-aggregates/" rel="external nofollow noopener" target="_blank">Timescales continuous aggregates</a></p>
+  </li>
+  <li>
+    <p><strong>Data Compression</strong>
+Similar to sound compression algorithms, time series databases can store the difference between consecutive data points rather than the actual values. Leveraging this intuition most time series technology use <a href="https://www.timescale.com/blog/time-series-compression-algorithms-explained/" rel="external nofollow noopener" target="_blank">state of the art compression algorithm</a>. To give you an idea, some timescale db customers claimed to have saved up <a href="https://www.timescale.com/features/compression" rel="external nofollow noopener" target="_blank">to 94% of</a> storage thanks to compression. You can imagine, how this can have a huge impact on costs.</p>
+  </li>
+  <li>
+    <p><strong>Ad Hoc Functions to Manipulate Time</strong>
+Timeseries have a much better support to handle queries that deal with time, compared to traditional SQL databases. A non exhaustive list includes: interpolation, date extration, and support for several time formats. You can get an idea by taking a look at <a href="https://docs.aws.amazon.com/timestream/latest/developerguide/date-time-functions.html" rel="external nofollow noopener" target="_blank">Timestream’s date/time functions</a> <a href="https://docs.influxdata.com/influxdb/cloud-serverless/reference/sql/functions/time-and-date/" rel="external nofollow noopener" target="_blank">and InfluxDB time functions</a></p>
+  </li>
+</ul>
+
+<h2 id="when-should-you-use-a-time-series-database">When Should You Use a Time Series Database</h2>
+
+<p>Now that we’ve gone through how time series databases work and the use cases they solve, the question of “when should you use it”, it pretty straightforward.
+If you’re dealing with time series data, and you expect to deal with one or more of the following use cases:</p>
+
+<ul>
+  <li>Extracting data over specific period of times</li>
+  <li>Aggregations of those data into different time frames</li>
+  <li>Need to scale</li>
+</ul>
+
+<p>Then you should definitely consider using one of them.</p>
+</body></html>
