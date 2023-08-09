@@ -1,3 +1,12 @@
+---
+layout: post
+title: "Unlocking the Power of Time Series Databases"
+date: 2023-08-07T09:03:20-08:00
+description: A simple overview on how time series technologies work and how they can improve the performance and scalability of your apis, as well as your
+tags: databases
+categories: technical
+---
+
 # Why and when to use Time Series Databases
 
 ![enter image description here](https://www.imsl.com/sites/default/files/image/2020-07/image-blog-time-series-analysis.jpg)
@@ -43,11 +52,17 @@ As we mentioned, time series databases are engines optimized to store, manage, a
 
 ## When Should You Use a Time Series Database
 
-Now that we've gone through how time series databases work and the use cases they solve, the question of "when should you use it", it pretty straightforward.
-If you're dealing with time series data, and you expect to deal with one or more of the following use cases:
+Now that we have explored how time series databases work and the problems they address, the question of when to use them becomes straightforward. Consider employing a time series database if you are dealing with time series data and anticipate one or more of the following use cases:
 
-- Extracting data over specific period of times
-- Aggregations of those data into different time frames
-- Need to scale
+- Extracting data over specific periods of time
+- Aggregating data into different time frames
+- Needing scalability for handling large volumes of time series data
+  In such scenarios, utilizing a time series database is highly recommended.
 
-Then you should definitely consider using one of them.
+Here are some of the main time series database products available in the market today:
+
+- **InfluxDB**: InfluxDB is a widely adopted open-source time series database known for its high performance and scalability. It offers a flexible data model, supports efficient data compression, and provides a query language (InfluxQL or Flux) tailored for time series analysis.
+- **TimescaleDB**: Built on top of PostgreSQL, TimescaleDB combines the reliability and robustness of a traditional relational database with the scalability and performance required for time series workloads. It offers automatic partitioning, supports continuous aggregates, and provides an SQL interface.
+- **Timestream**: Developed by Amazon Web Services (AWS), Timestream is a fully managed time series database designed for handling large-scale, high-resolution data. It integrates well with other AWS services, offers built-in time series functions, and provides easy data ingestion and querying capabilities.
+  Timeseries
+  Database
