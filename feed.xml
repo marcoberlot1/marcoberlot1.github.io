@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="https://marcoberlot1.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://marcoberlot1.github.io/" rel="alternate" type="text/html" hreflang="en" /><updated>2023-07-07T16:02:25+00:00</updated><id>https://marcoberlot1.github.io/feed.xml</id><title type="html">blank</title><subtitle>Personal Website of Computer Scientist Marco Berlot.
-</subtitle><entry><title type="html">What Are Time Series Databases</title><link href="https://marcoberlot1.github.io/blog/2023/what-are-time-series-databases/" rel="alternate" type="text/html" title="What Are Time Series Databases" /><published>2023-07-01T00:00:00+00:00</published><updated>2023-07-01T00:00:00+00:00</updated><id>https://marcoberlot1.github.io/blog/2023/what-are-time-series-databases</id><content type="html" xml:base="https://marcoberlot1.github.io/blog/2023/what-are-time-series-databases/"><![CDATA[<h1 id="why-and-when-to-use-time-series-databases">Why and when to use Time Series Databases</h1>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="https://marcoberlot1.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://marcoberlot1.github.io/" rel="alternate" type="text/html" hreflang="en" /><updated>2023-08-09T09:35:47+00:00</updated><id>https://marcoberlot1.github.io/feed.xml</id><title type="html">blank</title><subtitle>Personal Website of Computer Scientist Marco Berlot.
+</subtitle><entry><title type="html">Unlocking the Power of Time Series Databases</title><link href="https://marcoberlot1.github.io/blog/2023/what-are-time-series-databases/" rel="alternate" type="text/html" title="Unlocking the Power of Time Series Databases" /><published>2023-08-07T17:03:20+00:00</published><updated>2023-08-07T17:03:20+00:00</updated><id>https://marcoberlot1.github.io/blog/2023/what-are-time-series-databases</id><content type="html" xml:base="https://marcoberlot1.github.io/blog/2023/what-are-time-series-databases/"><![CDATA[<h1 id="why-and-when-to-use-time-series-databases">Why and when to use Time Series Databases</h1>
 
 <p><img src="https://www.imsl.com/sites/default/files/image/2020-07/image-blog-time-series-analysis.jpg" alt="enter image description here" /></p>
 
@@ -54,16 +54,24 @@ Timeseries have a much better support to handle queries that deal with time, com
 
 <h2 id="when-should-you-use-a-time-series-database">When Should You Use a Time Series Database</h2>
 
-<p>Now that we’ve gone through how time series databases work and the use cases they solve, the question of “when should you use it”, it pretty straightforward.
-If you’re dealing with time series data, and you expect to deal with one or more of the following use cases:</p>
+<p>Now that we have explored how time series databases work and the problems they address, the question of when to use them becomes straightforward. Consider employing a time series database if you are dealing with time series data and anticipate one or more of the following use cases:</p>
 
 <ul>
-  <li>Extracting data over specific period of times</li>
-  <li>Aggregations of those data into different time frames</li>
-  <li>Need to scale</li>
+  <li>Extracting data over specific periods of time</li>
+  <li>Aggregating data into different time frames</li>
+  <li>Needing scalability for handling large volumes of time series data
+In such scenarios, utilizing a time series database is highly recommended.</li>
 </ul>
 
-<p>Then you should definitely consider using one of them.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[Why and when to use Time Series Databases]]></summary></entry><entry><title type="html">How to Leverage AWS Step Functions to Build an Event-Driven Architecture</title><link href="https://marcoberlot1.github.io/blog/2022/leverage-aws-step-functions/" rel="alternate" type="text/html" title="How to Leverage AWS Step Functions to Build an Event-Driven Architecture" /><published>2022-11-20T17:03:20+00:00</published><updated>2022-11-20T17:03:20+00:00</updated><id>https://marcoberlot1.github.io/blog/2022/leverage-aws-step-functions</id><content type="html" xml:base="https://marcoberlot1.github.io/blog/2022/leverage-aws-step-functions/"><![CDATA[<h2 id="introduction">Introduction</h2>
+<p>Here are some of the main time series database products available in the market today:</p>
+
+<ul>
+  <li><strong>InfluxDB</strong>: InfluxDB is a widely adopted open-source time series database known for its high performance and scalability. It offers a flexible data model, supports efficient data compression, and provides a query language (InfluxQL or Flux) tailored for time series analysis.</li>
+  <li><strong>TimescaleDB</strong>: Built on top of PostgreSQL, TimescaleDB combines the reliability and robustness of a traditional relational database with the scalability and performance required for time series workloads. It offers automatic partitioning, supports continuous aggregates, and provides an SQL interface.</li>
+  <li><strong>Timestream</strong>: Developed by Amazon Web Services (AWS), Timestream is a fully managed time series database designed for handling large-scale, high-resolution data. It integrates well with other AWS services, offers built-in time series functions, and provides easy data ingestion and querying capabilities.
+Timeseries
+Database</li>
+</ul>]]></content><author><name></name></author><category term="technical" /><category term="databases" /><summary type="html"><![CDATA[A simple overview on how time series technologies work and how they can improve the performance and scalability of your apis, as well as your]]></summary></entry><entry><title type="html">How to Leverage AWS Step Functions to Build an Event-Driven Architecture</title><link href="https://marcoberlot1.github.io/blog/2022/leverage-aws-step-functions/" rel="alternate" type="text/html" title="How to Leverage AWS Step Functions to Build an Event-Driven Architecture" /><published>2022-11-20T17:03:20+00:00</published><updated>2022-11-20T17:03:20+00:00</updated><id>https://marcoberlot1.github.io/blog/2022/leverage-aws-step-functions</id><content type="html" xml:base="https://marcoberlot1.github.io/blog/2022/leverage-aws-step-functions/"><![CDATA[<h2 id="introduction">Introduction</h2>
 
 <p>Event-driven architectures have grown in popularity as they offer increased flexibility, scalability, and responsiveness to modern application demands. These architectures often involve numerous services and queues or message brokers, which can be challenging to manage. In this blog post, we’ll explore how AWS Step Functions can be a powerful tool for building and managing event-driven architectures through orchestration.</p>
 
