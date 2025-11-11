@@ -22,4 +22,4 @@ I was Previously at AWS working on deploying multimodal models on Inferentia and
 
 I hold a Meng in Computer Science from Cornell University
 
-I write about science and philosophy at https://silicontales.substack.com/
+I write about science and philosophy at [silicon tales](https://silicontales.substack.com/)
