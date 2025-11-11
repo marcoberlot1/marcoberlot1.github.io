@@ -16,9 +16,9 @@ selected_papers: false # includes a list of papers marked as "selected={true}"
 social: true # includes social icons at the bottom of the page
 ---
 
-ML engineer at Google DeepMind. Working on Gemini pretraining libraries and infrastructure
+Senior ML engineer at Google DeepMind. Working on Gemini pretraining libraries and infra.
 
-I was Previously at AWS working on deploying multimodal models on Inferentia and Trainium accellerators
+I was Previously at AWS working on scaling large multimodal models on Inferentia and Trainium accellerators
 
 I hold a Meng in Computer Science from Cornell University
 
