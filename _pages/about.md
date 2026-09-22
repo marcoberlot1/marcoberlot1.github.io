@@ -18,7 +18,7 @@ social: true # includes social icons at the bottom of the page
 
 Senior ML engineer at Google DeepMind. Working on Gemini pretraining libraries and infra.
 
-I was previously at AWS working on scaling large multimodal models on Inferentia and Trainium accellerators
+I was Previously at AWS working on scaling large multimodal models on Inferentia and Trainium accellerators
 
 I hold a Meng in Computer Science from Cornell University
 
