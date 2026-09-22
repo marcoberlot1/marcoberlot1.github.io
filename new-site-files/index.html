@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Marco Berlot</title>
+<meta name="description" content="Marco Berlot — ML infrastructure engineer at Google DeepMind, working on checkpointing and mid-training RL infrastructure.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<div class="wrap">
+
+  <nav class="site-nav">
+    <span class="brand">marcoberlot.com</span>
+    <span class="links">
+      <a href="/" class="current">home</a>
+      <a href="/blog/">blog</a>
+    </span>
+  </nav>
+
+  <header class="masthead">
+    <div class="kicker">
+      <span>PORTFOLIO</span>
+    </div>
+    <h1 class="title">Marco Berlot</h1>
+    <div class="role-line">ML infrastructure engineer, Google DeepMind</div>
+    <p class="subtitle">I build infrastructure for training large models — most of my time goes into checkpointing: getting model weights safely and efficiently between memory and storage, across every workflow and scale a training run can hit. I think of myself as a cross-lifecycle infrastructure generalist.</p>
+
+    <div class="hero-anim">
+      <div class="hero-grid" id="heroGrid"></div>
+      <div class="hero-anim-label">a checkpoint, mid-write</div>
+    </div>
+
+    <div class="link-row">
+      <a class="pill" href="https://github.com/marcoberlot1" target="_blank" rel="noopener">github ↗</a>
+      <a class="pill" href="https://twitter.com/MarcoBerlot" target="_blank" rel="noopener">twitter ↗</a>
+      <a class="pill" href="/blog/">writing →</a>
+    </div>
+  </header>
+
+  <section class="sec">
+    <h3 class="block-title">Work</h3>
+
+    <div class="work-item">
+      <div class="when">Google DeepMind</div>
+      <h4>ML Infrastructure Engineer</h4>
+      <ul>
+        <li>Co-own a proprietary checkpointing library: online transformations, selective checkpoint reads, merging and stacking checkpoints, and memory-efficient operations under model-sharding constraints.</li>
+        <li>Co-published work connected to Google's open-source checkpointing library.</li>
+        <li>Built mid-training infrastructure for large-scale RL, focused on run stability and checkpointable state.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h3 class="block-title">Writing</h3>
+    <a class="post-card" href="/blog/transformer-math-annotated/">
+      <div class="when">Annotated reading</div>
+      <h3>Transformer Math, Annotated</h3>
+      <p>An annotated walkthrough of how FLOPs, memory, and attention costs actually add up in a transformer — where C ≈ 6ND comes from, why training costs 3× a forward pass, and when attention's quadratic term actually starts to matter.</p>
+    </a>
+    <div class="link-row">
+      <a class="pill" href="/blog/">all posts →</a>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h3 class="block-title">Off the clock</h3>
+    <p>Outside of work I play jazz guitar — an intermediate player leaning into modern jazz, currently chasing the phrasing and harmonic vocabulary of players like Pat Metheny and Wolfgang Muthspiel, in whatever time a weekly practice schedule allows.</p>
+  </section>
+
+  <footer class="foot">
+    <span>Marco Berlot · <a href="/">marcoberlot.com</a></span>
+  </footer>
+
+</div>
+
+<script>
+  // reuse the artifact's hero pulse grid
+  (function(){
+    const grid = document.getElementById('heroGrid');
+    if(!grid) return;
+    const n = 16;
+    for(let i=0;i<n;i++){
+      const cell = document.createElement('div');
+      cell.className = 'hero-cell';
+      cell.style.animationDelay = (Math.random()*3.6).toFixed(2) + 's';
+      grid.appendChild(cell);
+    }
+  })();
+</script>
+
+</body>
+</html>
