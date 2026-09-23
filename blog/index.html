@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Blog · Marco Berlot</title>
-<meta name="description" content="Writing by Marco Berlot on ML infrastructure, checkpointing, and transformer training.">
+<meta name="description" content="Writing by Marco Berlot: essays on the history and ideas behind AI, and technical writings on ML infrastructure and transformer training.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,600;1,700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Courier+Prime:wght@400;700&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/site.css">
 </head>
 <body>
@@ -28,13 +28,40 @@
     </div>
     <h1 class="title">Writing</h1>
     <p class="subtitle">Notes on ML infrastructure, checkpointing, and how transformers actually spend their compute.</p>
+
+    <div class="hero-anim">
+      <svg class="ink-illust" viewBox="0 0 230 95" aria-hidden="true">
+        <path d="M20,72 L58,50" style="--len:46; --delay:0.00s"></path>
+        <path d="M58,50 L96,78" style="--len:50; --delay:0.28s"></path>
+        <path d="M96,78 L134,42" style="--len:55; --delay:0.56s"></path>
+        <path d="M134,42 L172,64" style="--len:46; --delay:0.84s"></path>
+        <path class="ink-accent" d="M172,64 L210,36" style="--len:50; --delay:1.12s"></path>
+        <circle class="ink-dot" cx="20" cy="72" r="3" style="--delay:0.15s"></circle>
+        <circle class="ink-dot" cx="58" cy="50" r="3" style="--delay:0.43s"></circle>
+        <circle class="ink-dot" cx="96" cy="78" r="3" style="--delay:0.71s"></circle>
+        <circle class="ink-dot" cx="134" cy="42" r="3" style="--delay:0.99s"></circle>
+        <circle class="ink-dot" cx="172" cy="64" r="3" style="--delay:1.27s"></circle>
+        <circle class="ink-dot ink-accent" cx="210" cy="36" r="3.6" style="--delay:1.55s"></circle>
+      </svg>
+      <div class="hero-anim-label">one idea leads to the next, eventually</div>
+    </div>
   </header>
 
   <section class="sec">
+    <h3 class="block-title">Essays</h3>
+    <a class="post-card" href="/blog/essays/a-history-of-humanitys-quest-for-the-best-answer/">
+      <div class="when">Nov 11, 2025</div>
+      <h3>A History of Humanity's Quest for the Best Answer</h3>
+      <p>A journey through the history of optimization, from Gauss's lost planet to the future of AI.</p>
+    </a>
+  </section>
+
+  <section class="sec">
+    <h3 class="block-title">Technical Writings</h3>
     <a class="post-card" href="/blog/transformer-math-annotated/">
       <div class="when">Annotated reading</div>
       <h3>Transformer Math, Annotated</h3>
-      <p>Where C ≈ 6ND comes from, why training costs 3× a forward pass, and when attention's quadratic term actually starts to matter — a click-through annotated walkthrough of transformer FLOPs and memory.</p>
+      <p>A click-through annotated walkthrough of transformer FLOPs and memory: where C ≈ 6ND comes from, why training costs 3× a forward pass, and when attention's quadratic term actually starts to matter.</p>
     </a>
   </section>
 

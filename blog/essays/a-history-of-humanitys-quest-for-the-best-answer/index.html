@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>A History of Humanity's Quest for the Best Answer · Marco Berlot</title>
+<meta name="description" content="A journey through the history of optimization, from Gauss's lost planet to the future of AI.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,600;1,700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Courier+Prime:wght@400;700&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+  figure{ margin:26px 0; }
+  figure img{ display:block; width:100%; height:auto; border:1px solid var(--line); }
+  figcaption{ font-family:var(--mono); font-size:12px; color:var(--text-faint); margin-top:8px; font-style:italic; }
+  .essay p{ margin:0 0 16px; }
+  .essay .lead{ font-size:1.08rem; color:var(--text-dim); }
+  h3.sub-title{ margin-top:28px; }
+  .essay ul, .essay ol.plain{ margin:0 0 16px; padding-left:22px; }
+  .essay li{ margin-bottom:10px; }
+  .footnotes{ font-family:var(--mono); font-size:13px; color:var(--text-dim); }
+  .footnotes li{ margin-bottom:6px; }
+</style>
+</head>
+<body>
+
+<div class="wrap essay">
+
+  <nav class="site-nav">
+    <span class="brand">marcoberlot.com</span>
+    <span class="links">
+      <a href="/">home</a>
+      <a href="/blog/" class="current">blog</a>
+    </span>
+  </nav>
+
+  <header class="masthead">
+    <div class="kicker">
+      <span>ESSAY · NOV 11, 2025</span>
+      <a href="https://silicontales.substack.com/p/a-history-of-humanitys-quest-for" target="_blank" rel="noopener">silicon tales ↗</a>
+    </div>
+    <h1 class="title">A History of Humanity's Quest for the Best Answer</h1>
+    <p class="subtitle">A journey through the history of optimization, from Gauss's lost planet to the future of AI.</p>
+  </header>
+
+  <section class="sec">
+    <h2 class="sec-title">The Unchanging Problem</h2>
+    <p class="lead">We tend to tell the story of scientific progress, and of AI along with it, as a sequence of brand-new problems. This essay takes the opposite view: underneath it all sits one problem that never changes, only the mathematical tools brought to bear on it get more sophisticated, and more daring. That one problem is optimization.</p>
+    <p>At bottom, the task hasn't shifted at all. Whether it's a 19th-century astronomer mapping the sky or a modern neural network learning to recognize a photo, the aim is the same: find the parameters that push a loss function, a plain measure of how wrong the model is, as low as possible. To trace that story, we'll lean on one recurring image: the "error landscape."</p>
+
+    <figure>
+      <img src="https://substackcdn.com/image/fetch/$s_!zaHi!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Ff5b25329-0a8a-4023-9957-9aaaba96bddc_1408x768.png" alt="Illustration of an error landscape as terrain" loading="lazy">
+      <figcaption>AI generated image (A.D. 1785)</figcaption>
+    </figure>
+
+    <p>Picture every possible setting of the parameters as a point with its own altitude, its error score. The best solution sits at the lowest point, the floor of the deepest valley. What separates one era from the next isn't the wish to find that valley, everyone wants that, it's how complicated a terrain they were willing to attempt. The arc we'll follow runs from a landscape that's a single, tidy bowl to one that looks like a sprawling, chaotic mountain range.</p>
+    <p>That progression traces a deeper shift in what "getting smarter" even means. It isn't simply more raw computational muscle, it's a fundamentally different relationship with uncertainty and with the idea of a perfect answer.</p>
+
+    <ul>
+      <li><b>Era I, the 1800s,</b> insisted on total, deterministic certainty: the answer had to be one exact formula, and the problem wasn't "solved" until you could prove that formula was the only possible solution.</li>
+      <li><b>Era II, the 1950s,</b> made room for iteration, a step-by-step search, but only on one condition: a mathematical guarantee that the search would land on the single best answer. That guarantee, convexity, was what let people trust these unfamiliar new electronic computers.</li>
+      <li><b>Era III, the 2010s,</b> took a braver step: it let go of any guarantee of optimality and settled for "good enough" in landscapes so tangled (non-convex) that a truly optimal answer wasn't even knowable.</li>
+      <li><b>Era IV, still ahead of us,</b> is learning to operate with almost no signal to follow at all, a landscape with no gradient, relying on pure black-box trial and error to crack problems that were previously out of reach.</li>
+    </ul>
+
+    <p>So "getting smarter," in practice, has meant a slow and fairly bold retreat from the need for perfect certainty. It's precisely that willingness to let go that lets us take on problems that are messier, more complex, and closer to how the real world actually behaves.</p>
+    <p>As a scaffold for the rest of this piece, here's a quick summary of the four eras of optimization.</p>
+  </section>
+
+  <section class="sec">
+    <h2 class="sec-title"><span class="num">Part I</span> An Age of Certainty: Exact Answers for a Clockwork Universe (the 1800s)</h2>
+
+    <h3 class="sub-title">The Story: A Planet Goes Missing</h3>
+    <p>Optimization's life as a practical, working tool doesn't start with a computer, it starts with a crisis in the sky. On New Year's Day 1801, Giuseppe Piazzi, observing from Palermo, spotted a celestial object nobody had seen before. He tracked it carefully for forty days, but lost it again before he could pin down its orbit, swallowed by the glare of the sun.</p>
+    <p>This wasn't just any missing object, astronomers were gripped by it. Its position matched the Titius-Bode law, a rule predicting how planets should be spaced, right in the gap between Mars and Jupiter where a planet was "supposed" to be. Recovering it became one of the era's defining scientific challenges. The trouble was that it looked impossible: how do you reconstruct a full elliptical orbit from a handful of sparse, noisy observations?</p>
+    <p>The answer came from Carl Friedrich Gauss, then just 24. He'd quietly been refining a powerful technique in his private notebooks since he was 18, in 1795, without ever publishing it. Turning it loose on Piazzi's thin data, he produced a remarkably precise prediction of where the object, which he'd named Ceres, would reappear.</p>
+    <p>On December 7, 1801, Franz Xaver von Zach pointed his telescope where Gauss's math told him to, and found Ceres again. It was a genuine moment of scientific heroism, mathematics winning out over uncertainty, and it made Gauss famous well beyond Germany. The tool behind it was the method of least squares.</p>
+
+    <figure>
+      <img src="https://substackcdn.com/image/fetch/$s_!mPg6!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fb94ca768-a888-4d91-9629-003a20204b56_1285x1536.webp" alt="Gauss's original sketch for least squares" loading="lazy">
+      <figcaption>Gauss' original sketch. Source: Gauss (1809)</figcaption>
+    </figure>
+
+    <h3 class="sub-title">The Human Side: A "Trivial" Discovery and a Famous Feud</h3>
+    <p>Gauss's dramatic success brought, almost inevitably, a priority dispute with another mathematical giant. He'd used the method back in 1801, but the Frenchman Adrien-Marie Legendre had arrived at it independently, and published it first. Legendre's 1805 book, <i>Nouvelles méthodes pour la détermination des orbites des comètes</i>, was the first public account of the technique.</p>
+    <p>What followed became one of science's best-known feuds. Legendre, first into print, considered the matter settled in his favor. Gauss, in his 1809 publication, pointed out that he'd actually been using the method since 1795, a claim that was true, and that Legendre found maddening.</p>
+
+    <h3 class="sub-title">The Math: A One-Step Answer</h3>
+    <p>Every calculation in this era had to be worked by hand, and that constraint alone forced a philosophy built around certainty: trial-and-error search simply wasn't feasible. What Gauss and Legendre offered instead was a closed-form solution, one direct formula, no iteration, that handed you the exact final answer in a single pass.</p>
+    <p>The task was to find the parameters β, for a line or an orbit, that minimized total error. That error, L, is defined as the sum of the squared vertical gaps between what was observed and what the model predicted.</p>
+    <p><b>The Loss Function.</b> Written in matrix form, this is the least-squares loss: y is the vector of observations, X the matrix of input data, and β the vector of parameters we're solving for.</p>
+    <p>The error itself, the residual, is:</p>
+    <div class="formula-box">
+      <span class="lbl">residual</span>
+      e = y − Xβ
+    </div>
+    <p>Minimizing the sum of squared residuals, in matrix notation, gives:</p>
+    <div class="formula-box">
+      <span class="lbl">least squares loss</span>
+      L(β) = Σ(yᵢ − ŷᵢ)² = (y − Xβ)ᵀ(y − Xβ)
+    </div>
+    <p>Taking the derivative of L with respect to β (skipping the intermediate calculus) gives the gradient:</p>
+    <div class="formula-box">
+      <span class="lbl">the Normal Equation</span>
+      ∇L(β) = ∂L/∂β = 0 − 2Xᵀy + 2XᵀXβ
+    </div>
+    <p>That result is the Normal Equation, and it's a remarkable thing: a direct formula for the best possible answer. No guesswork, no iterating. Feed in your observed data, X and y, run the matrix operations, and the one optimal solution falls out.</p>
+    <p>Geometrically, there's something almost elegant about it.</p>
+    <div class="formula-box">
+      <span class="lbl">projection matrix</span>
+      X(XᵀX)⁻¹Xᵀ
+    </div>
+    <p>This term is a projection matrix, and what the formula is really doing is finding the "shadow" that your real-world data vector casts onto the idealized space defined by X. The parameters are just the recipe for that shadow. It was exactly the kind of answer suited to an age that still believed in a clockwork, fully-determined universe.</p>
+  </section>
+
+  <section class="sec">
+    <h2 class="sec-title"><span class="num">Part II</span> An Age of Confidence: The Guaranteed Search (the 1950s)</h2>
+
+    <h3 class="sub-title">The Story: A Problem of Scale</h3>
+    <p>The arrival of the electronic computer, SEAC, built by the National Bureau of Standards in 1950, changed what optimization could even attempt. Iterative, trial-and-error calculation suddenly became practical. What it needed was a problem worthy of it, and that problem was scale. During WWII, the US Army Air Force had leaned on rooms of clerks with desk calculators to try to mechanize planning; after the war, that effort became Project SCOOP (Scientific Computation of Optimal Programs), a dedicated task force inside the Air Force.</p>
+    <p>This was no longer about locating a single planet. It was allocating thousands of resources at once, tuning factory output, routing enormous supply chains. These became known as linear programming problems, and with thousands of variables apiece, they were well beyond anything Gauss's one-step Normal Equation could touch.</p>
+
+    <h3 class="sub-title">The Hero, and Some "Unsolved Homework"</h3>
+    <p>This era's central figure was George Dantzig, and his origin story has become something of a legend. As a Berkeley graduate student, he showed up late one day to the statistics class taught by the well-known Jerzy Neyman.</p>
+    <p>Finding two problems on the board, he took them for the homework assignment and copied them down. A few days later he turned them in late, apologizing, and mentioning they'd felt harder than usual. What he'd actually done was solve two open, unsolved problems in statistics. Neyman was impressed enough to accept the work as Dantzig's doctoral thesis.</p>
+
+    <h3 class="sub-title">The Tool, and the "Diet Problem"</h3>
+    <p>Years on, as chief mathematician for Project SCOOP, Dantzig produced his defining achievement: the Simplex Method, built to solve exactly these large linear programming problems. First devised in 1947, it became the workhorse algorithm of the whole 1950s paradigm.</p>
+    <p>To try the method out, Dantzig famously turned it on himself: the "Diet Problem," finding the cheapest combination of foods that would satisfy all his daily nutrition needs. What came out the other end turned into a perfect, and genuinely funny, parable for the future of AI.</p>
+    <p>His wife Anne remembered him phoning home with the first "optimal" answer. He admitted it was a bit strange: it called for drinking a couple of gallons of vinegar a day.</p>
+    <p>It turned out a data-entry mistake had listed vinegar as extremely nutritious. With that fixed and the program rerun, Dantzig called again with a new answer, this one, he promised, was reasonable: 200 bouillon cubes a day. His wife answered with one of the more memorable puns in the history of science: "What are you trying to do, corner the bouillon market?"</p>
+    <p>There's more to this story than comedy. It may be the earliest real example of an "alignment failure." The algorithm itself was flawless, it did precisely what it was asked. The problem sat in Dantzig's objective function, the constraints, which never capped salt intake. Simplex simply exposed that gap without mercy. It's a fitting origin story for a core idea in AI safety: an optimizer chases the goal you actually specified, not the one you had in mind, and a flawed objective, optimized well, can do more damage than no optimization at all.</p>
+
+    <h3 class="sub-title">The Concept: Convexity as a Safety Net</h3>
+    <p>The new computers could iterate, but that raised a question: how could Dantzig trust Simplex to actually work? The search space was enormous. What if it settled into a false valley, a solution that looked good, a local minimum, without being the true best answer, the global minimum?</p>
+    <p>The answer the 1950s leaned on was a mathematical safety net of a different kind of certainty: convexity.</p>
+    <p>A function counts as convex when its error landscape forms one clean, simple bowl, no dips, no false bottoms, just a single smooth basin.</p>
+    <p>The formal test for that bowl shape is simple and rather elegant: pick any two points on the function's graph, draw a straight line between them, and that line will never fall below the curve itself.</p>
+
+    <figure>
+      <img src="https://substackcdn.com/image/fetch/$s_!F45u!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fbd6dcb40-0987-4767-b26d-a7533fd76e9a_1024x559.jpeg" alt="A convex, bowl-shaped function" loading="lazy">
+      <figcaption>AI generated image of a quadratic function (circa 1750 A.D.)</figcaption>
+    </figure>
+
+    <p>The Diet Problem, cheapest food combination meeting minimum nutrition, was a fundamentally different kind of challenge from Gauss's. It's a constrained optimization problem, shaped by linear inequalities (Dantzig, 1990). Rather than reconciling conflicting data, the goal is to find the best outcome achievable inside a fixed set of boundaries.</p>
+    <p>The Diet Problem is a textbook Linear Programming (LP) problem, which in its standard form looks like this:</p>
+    <div class="formula-box">
+      <span class="lbl">a linear program</span>
+      minimize   Z = c₁x₁ + c₂x₂ + … + cₙxₙ
+    </div>
+    <p>subject to the nutritional constraints:</p>
+    <div class="formula-box">
+      a₁₁x₁ + a₁₂x₂ + … + a₁ₙxₙ ≥ b₁
+    </div>
+    <p>Here x<sub>i</sub> is how much of food i you eat, c<sub>i</sub> its price per unit, b<sub>j</sub> the minimum required amount of nutrient j, and a<sub>ij</sub> how much of nutrient j sits in one unit of food i.</p>
+    <p>Simplex was Dantzig's systematic way of solving this. Every LP problem defines a "feasible region," a convex, many-sided shape (a polyhedron) formed by the intersection of all its constraints. Dantzig's key insight, the Fundamental Theorem of Linear Programming, was that if an optimal solution exists at all, it sits at one of that shape's corners. Simplex simply walks along the polyhedron's edges, corner to better corner, until no improvement is left. It was the first practical way to handle large, heavily constrained planning problems, and it effectively founded the field of Operations Research.</p>
+    <p>Its descendants are everywhere: logistics firms use it to find the cheapest routing for thousands of shipments, refineries use it to blend crude oil into gasoline and jet fuel, and financial firms use it to balance portfolios against risk. Problems with hundreds of variables and constraints were essentially unsolvable before Simplex; Dantzig's method made them tractable, and opened up the modern era of operations research.</p>
+  </section>
+
+  <section class="sec">
+    <h2 class="sec-title"><span class="num">Part III</span> An Age of Pragmatism: Taming the Non-Convex (the 2010s)</h2>
+
+    <h3 class="sub-title">The Story: The ImageNet Moment</h3>
+    <p>Skip ahead sixty years. The problem is no longer plotting orbits or scheduling factories, it's teaching a machine to see. Specifically: the ImageNet Large Scale Visual Recognition Challenge, sorting 1.2 million high-resolution photos correctly into a thousand categories, everything from "Maltese dog" to "container ship" to "lemon."</p>
+    <p>Here the error landscape is nothing like a tidy convex bowl. It's a highly irregular, non-convex mountain range, with billions of parameters and more hills, saddle points, and valleys than anyone could count.</p>
+    <p>2012 broke the problem wide open. AlexNet, a deep network from Alex Krizhevsky, Ilya Sutskever, and Geoffrey Hinton, won the challenge, and not by a small margin: 15.3% error against 26.2% for the best non-deep-learning entry. That's not a win, it's a revolution, arguably the Big Bang of the modern AI era, and nothing looked the same afterward.</p>
+
+    <h3 class="sub-title">The Tool, and Its Sleeper History</h3>
+    <p>What new optimization engine drove this breakthrough? Ironically, none. The engine was a sixty-year-old method with a reputation for being sloppy and imprecise: Stochastic Gradient Descent (SGD).</p>
+    <p><b>The Humble Origin: 1951.</b> The core idea, approximating a true gradient stochastically, traces back to the 1951 Robbins-Monro algorithm. It was a known statistical tool, though never a dominant one, used for simple models like ADALINE linear regression in the 1960s.</p>
+    <p><b>The Academic Champion: 1991.</b> For decades SGD lived in the shadow of fancier, theoretically faster optimization methods. Its most persistent advocate was Léon Bottou, who, starting with his 1991 paper "Stochastic Gradient Learning in Neural Networks" and continuing through papers across the 1990s and 2000s, kept making the case that whatever its theoretical speed disadvantage, SGD was dramatically more efficient and more robust for training networks on large datasets.</p>
+    <p>So why did an idea from 1951, championed in 1991, suddenly take over in 2012? Because the problem it was built for had finally shown up. SGD's real advantage is that its cost has nothing to do with total dataset size: rather than computing the true gradient across all 1.2 million ImageNet photos, an impossible amount of computation, it estimates the gradient from a small random minibatch, say, 128 images.</p>
+    <p>On the small academic datasets of the 20th century that trait barely mattered. In the Big Data era ImageNet ushered in, that same "flaw" became its greatest strength, the only realistic way to work through a dataset that size. AlexNet's win was really the coronation of a sleeper algorithm that had spent sixty years waiting for datasets, and GPUs well suited to minibatch math, big enough to actually need it.</p>
+
+    <h3 class="sub-title">The Concept: Why the Noise Is a Feature, Not a Bug</h3>
+    <p>This called for a new philosophy, a pragmatic shift. In a non-convex mountain range, finding the single lowest point, the global minimum, is computationally out of reach, and it turns out you don't even want it. The 2010s approach gave up that search and settled instead for any valley that was good enough.</p>
+
+    <figure>
+      <img src="https://substackcdn.com/image/fetch/$s_!9_em!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F31309064-1c0c-40bc-9de1-c48fca05f7bf_716x546.gif" alt="Animated visualization of gradient descent" loading="lazy">
+      <figcaption>a visual explanation of gradient descent (source towardsdatascience.com)</figcaption>
+    </figure>
+
+    <p>This is exactly where SGD's flaw turns into its magic.</p>
+    <ul>
+      <li><b>The Jiggle.</b> Because SGD estimates the slope from a small random minibatch, its read on the "true" gradient is noisy. Rather than gliding smoothly downhill, the optimizer jiggles and oscillates as it goes.</li>
+      <li><b>The Benefit: Escaping Bad Valleys.</b> A non-convex landscape is full of bad valleys, shallow, sharp local minima that would trap a smoother optimizer. SGD's jiggle turns out to be exactly what lets it escape those shallow traps, bouncing back out and continuing on toward something deeper.</li>
+      <li><b>The Flat Minima Hypothesis.</b> Research suggests the noise does more than help with escape. It acts like a smoothing operator, blurring the error landscape so that sharp, narrow valleys effectively vanish while broad, flat ones stay visible. That pushes SGD toward settling in those wide, flat minima, and it matters, because flat minima have been shown to generalize better to data the model hasn't seen.</li>
+    </ul>
+    <p>In short, the very sloppiness and imprecision that made SGD look second-rate in a convex world are exactly what make it so effective in the chaotic, non-convex world of deep learning.</p>
+  </section>
+
+  <section class="sec">
+    <h2 class="sec-title"><span class="num">Part IV</span> The Next Frontier: Optimizing in the Dark (the 2030s)</h2>
+
+    <h3 class="sub-title">The Story: A Robot's Dilemma</h3>
+    <p>SGD runs the modern world, but it has one fatal weakness: it needs a smooth, differentiable error landscape to work at all. It has to be able to compute a meaningful gradient, a slope, just to know which way is downhill.</p>
+    <p>But plenty of real problems don't offer a slope at all, just an all-or-nothing result. A robot arm grasps the object or it doesn't. A self-driving car avoids the obstacle or it crashes. In control problems like these, the feedback is frequently just success or failure, and to that, SGD's gradient-based map is simply blind.</p>
+
+    <figure>
+      <img src="https://substackcdn.com/image/fetch/$s_!ibeA!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F00a91034-bae3-4af2-9ec2-aaf5e4588e0b_3000x2096.jpeg" alt="Pen and ink cartoon" loading="lazy">
+      <figcaption>cartoon drawing, pen and ink, by F. Carruthers Gould (1880)</figcaption>
+    </figure>
+
+    <h3 class="sub-title">The Hurdle: The Zero-Slope Problem</h3>
+    <p>The loss function we actually care about, in the real world, is the 0/1 loss: a loss of 1 when you're wrong, 0 when you're right. It isn't some abstract stand-in, it's literally accuracy, the one number that ultimately matters.</p>
+    <p><b>The Visual: A Step Function.</b> So what does the 0/1 loss's landscape actually look like? Not a bowl, not a mountain range, a flat plateau at loss 1, a sheer 90-degree drop, and another flat plateau at loss 0. Just a plain step function.</p>
+    <p><b>The Problem: A Gradient of Zero.</b> And the slope of a flat, horizontal line is, of course, zero.</p>
+    <p>That's the zero-slope problem, and it matters because an optimizer like SGD navigates purely by following the gradient.</p>
+    <ul>
+      <li>If the model is completely wrong, loss sits at 1, on the upper plateau, gradient zero.</li>
+      <li>If it's completely right, loss sits at 0, on the lower plateau, gradient also zero.</li>
+    </ul>
+    <p>Either way, the optimizer computes a gradient of zero and stops, convinced it has already found a minimum. It gets no signal at all telling it how to improve, or even which plateau it's actually standing on.</p>
+    <p>This is really the dirty secret, or the necessary lie, at the center of modern deep learning. Since we can't directly optimize the 0/1 loss we actually want, we optimize surrogate functions instead. Smooth, differentiable losses like cross-entropy or hinge loss aren't the real target, they're smooth stand-ins for that step function. The whole of Era III has rested on hoping that minimizing the surrogate also minimizes the real 0/1 loss. The zero-slope problem is exactly the wall you hit once that approximation stops holding up, which happens often in robotics.</p>
+
+    <h3 class="sub-title">A New Paradigm: Zero-Order (ZO) Optimization</h3>
+    <p>If the gradient, the first-order information, is missing, useless, or actively misleading, the obvious question is: what if we just stopped relying on it? That's the philosophy behind the next frontier, zero-order (ZO) optimization.</p>
+    <p><b>First-Order vs. Zero-Order.</b> This is a genuinely different philosophy about what information you need:</p>
+    <ul>
+      <li><b>First-order (SGD)</b> needs the gradient. It's a map-based search, asking: which direction is downhill from here?</li>
+      <li><b>Zero-order (ZO)</b> is gradient-free. All it needs is the final loss value, a black-box search asking: is this new point better or worse than the last one?</li>
+    </ul>
+    <p><b>The Method: "Smarter" Trial and Error.</b> ZO methods turn optimization into a guided form of trial and error. Instead of tracing a precise path, they lean on techniques like random search or gradient approximation.</p>
+    <p>Evolutionary strategies (ES) are a good example, a family of algorithms that had their first wave of popularity in the 1970s and are now seeing a serious revival. The process itself is simple, and needs no gradient at all:</p>
+    <ol class="plain">
+      <li><b>Generate a population:</b> start from one parent solution, then create a population, say 100 children, by adding random noise to the parent's parameters.</li>
+      <li><b>Evaluate fitness:</b> run all 100 children and record each one's final loss, its fitness.</li>
+      <li><b>Select and recombine:</b> discard the 50 weakest, and average the parameters of the 50 strongest into a new parent for the next round.</li>
+      <li><b>Repeat:</b> generation after generation, this black-box process nudges the search toward better-performing regions of the landscape, without ever touching a gradient. It's a smarter way of finding your way in the dark.</li>
+    </ol>
+  </section>
+
+  <section class="sec">
+    <h2 class="sec-title">Part V — Conclusion: The Unchanging Manifold</h2>
+    <p>These four eras aren't really separate histories. They're four chapters of one continuous story: the attempt to map a single "optimization manifold." The story of AI, in that sense, is the story of explorers building new tools to chart that same unchanging landscape.</p>
+    <p>The tools kept changing, and we kept getting smarter, but the intelligence was never really in the tools. It was in the nerve to use them: the willingness to give up the comfort of Gauss's certainty, the courage to leave behind the safety of Dantzig's guarantee, and now, perhaps, the willingness to abandon even the pragmatism of "good enough" in favor of the blind, unsettling uncertainty of trial and error, in service of the problems that actually matter.</p>
+  </section>
+
+  <section class="sec">
+    <span style="display:block; color:var(--text-dim); font-family:var(--display); font-style:italic; font-size:15px; margin-bottom:8px;">Sources</span>
+    <ol class="footnotes">
+      <li>Least squares — <a href="https://math.mit.edu/icg/resources/teaching/18.085-spring2015/LeastSquares.pdf" target="_blank" rel="noopener">math.mit.edu</a></li>
+      <li>Least squares — <a href="https://en.wikipedia.org/wiki/Least_squares" target="_blank" rel="noopener">en.wikipedia.org</a></li>
+      <li>Titius–Bode law — <a href="https://sites.math.rutgers.edu/~cherlin/History/Papers1999/weiss.html" target="_blank" rel="noopener">sites.math.rutgers.edu</a></li>
+      <li>Ceres — <a href="https://www.jpl.nasa.gov/news/ceres-keeping-well-guarded-secrets-for-215-years/" target="_blank" rel="noopener">jpl.nasa.gov</a></li>
+      <li>Gauss — <a href="https://repository.lsu.edu/cgi/viewcontent.cgi?article=3096&context=gradschool_theses" target="_blank" rel="noopener">repository.lsu.edu</a></li>
+      <li>Legendre, 1805 — <a href="https://www.google.co.uk/books/edition/Nouvelles_m%C3%A9thodes_pour_la_d%C3%A9terminati/S-Aw43kRv-IC?hl=en" target="_blank" rel="noopener">google.co.uk/books</a></li>
+      <li>Project SCOOP — <a href="https://pubsonline.informs.org/do/10.1287/orms.2007.06.15/full/" target="_blank" rel="noopener">pubsonline.informs.org</a></li>
+      <li>Dantzig / Neyman — <a href="https://pubsonline.informs.org/do/10.1287/orms.2023.04.07n/full/" target="_blank" rel="noopener">pubsonline.informs.org</a></li>
+      <li>The Diet Problem — <a href="https://conversableeconomist.com/2025/10/07/when-george-dantzig-optimized-his-personal-diet-problem/" target="_blank" rel="noopener">conversableeconomist.com</a></li>
+      <li>ImageNet / AlexNet — <a href="https://proceedings.neurips.cc/paper_files/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf" target="_blank" rel="noopener">proceedings.neurips.cc</a></li>
+      <li>Stochastic gradient descent — <a href="https://fa.bianp.net/teaching/2018/COMP-652/stochastic_gradient.html" target="_blank" rel="noopener">fa.bianp.net</a></li>
+      <li>Bottou, 1991 — <a href="https://leon.bottou.org/publications/pdf/nimes-1991.pdf" target="_blank" rel="noopener">leon.bottou.org</a></li>
+      <li>SGD oscillation — <a href="https://www.lunartech.ai/blog/why-stochastic-gradient-descent-oscillates-towards-local-minima-an-in-depth-analysis" target="_blank" rel="noopener">lunartech.ai</a></li>
+      <li>Flat minima — <a href="https://arxiv.org/abs/2303.02749" target="_blank" rel="noopener">arxiv.org</a></li>
+      <li>Evolution strategies — <a href="https://lilianweng.github.io/posts/2019-09-05-evolution-strategies/" target="_blank" rel="noopener">lilianweng.github.io</a></li>
+      <li>Zeroth-order optimization — <a href="https://www.emergentmind.com/topics/zeroth-order-optimization" target="_blank" rel="noopener">emergentmind.com</a></li>
+    </ol>
+  </section>
+
+</div>
+
+</body>
+</html>

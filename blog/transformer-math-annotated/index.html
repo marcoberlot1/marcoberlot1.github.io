@@ -7,7 +7,7 @@
 <meta name="description" content="An annotated walkthrough of transformer FLOPs, memory, and attention cost accounting.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,600;1,700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Courier+Prime:wght@400;700&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/site.css">
 </head>
 <body>
@@ -32,32 +32,32 @@
     <h1 class="title">Counting FLOPs, Params, and Memory in a Transformer</h1>
     <div class="subtitle">
       A tap-to-explain walkthrough of how FLOPs, parameters, and memory are counted in a Transformer,
-      rewritten and annotated for reading on the go. Terms underlined in amber open a plain explanation;
+      rewritten and annotated for reading on the go. Terms underlined in sepia open a plain explanation;
       grids next to each formula let you tap a cell and count the multiplies and adds yourself.
     </div>
 
     <div class="hero-anim" aria-hidden="true">
-      <div class="hero-grid">
-        <div class="hero-cell" style="animation-delay:0.00s"></div>
-        <div class="hero-cell" style="animation-delay:0.15s"></div>
-        <div class="hero-cell" style="animation-delay:0.30s"></div>
-        <div class="hero-cell" style="animation-delay:0.45s"></div>
-        <div class="hero-cell" style="animation-delay:0.60s"></div>
-        <div class="hero-cell" style="animation-delay:0.75s"></div>
-        <div class="hero-cell" style="animation-delay:0.90s"></div>
-        <div class="hero-cell" style="animation-delay:1.05s"></div>
-        <div class="hero-cell" style="animation-delay:1.20s"></div>
-        <div class="hero-cell" style="animation-delay:1.35s"></div>
-        <div class="hero-cell" style="animation-delay:1.50s"></div>
-        <div class="hero-cell" style="animation-delay:1.65s"></div>
-      </div>
-      <span class="hero-anim-label">counting FLOPs, one dot product at a time. This is the whole page in miniature.</span>
+      <svg class="ink-illust" viewBox="0 0 234 125" aria-hidden="true">
+        <circle class="ink-dot" cx="15" cy="100" r="3" style="--delay:0.00s"></circle>
+        <circle class="ink-dot" cx="49" cy="100" r="3" style="--delay:0.07s"></circle>
+        <circle class="ink-dot" cx="83" cy="100" r="3" style="--delay:0.14s"></circle>
+        <circle class="ink-dot" cx="117" cy="100" r="3" style="--delay:0.21s"></circle>
+        <circle class="ink-dot ink-accent" cx="151" cy="100" r="3.8" style="--delay:0.28s"></circle>
+        <circle class="ink-dot" cx="185" cy="100" r="3" style="--delay:0.35s"></circle>
+        <circle class="ink-dot" cx="219" cy="100" r="3" style="--delay:0.42s"></circle>
+        <path d="M117,100 Q134,88 151,100" style="--len:48; --delay:0.50s"></path>
+        <path d="M151,100 Q168,88 185,100" style="--len:48; --delay:0.63s"></path>
+        <path d="M83,100 Q117,76 151,100" style="--len:96; --delay:0.76s"></path>
+        <path d="M151,100 Q185,76 219,100" style="--len:96; --delay:0.89s"></path>
+        <path class="ink-faint" d="M49,100 Q100,64 151,100" style="--len:143; --delay:1.02s"></path>
+        <path class="ink-faint" d="M15,100 Q83,52 151,100" style="--len:191; --delay:1.15s"></path>
+      </svg>
+      <span class="hero-anim-label">one query, seven keys, weights falling off with distance: this is the whole page in miniature.</span>
     </div>
 
     <div class="mode-row">
       <span class="pill" id="expandAllBtn">expand all notes</span>
       <span class="pill" id="collapseAllBtn">collapse all</span>
-      <span class="pill" id="themeBtn">toggle theme</span>
     </div>
   </header>
 
@@ -507,7 +507,7 @@ scores [B,N,T,S] · V [B,K,S,H] → out [B,N,T,H]</div>
   </section>
 
   <footer class="foot">
-    <span style="display:block; color:var(--text-dim); font-family:var(--sans); font-size:12.5px; margin-bottom:8px; text-transform:uppercase; letter-spacing:.03em;">Sources</span>
+    <span style="display:block; color:var(--text-dim); font-family:var(--display); font-style:italic; font-size:15px; margin-bottom:8px;">Sources</span>
     <span style="display:block; margin-bottom:5px;">Austin et al., <a href="https://jax-ml.github.io/scaling-book/transformers/" target="_blank" rel="noopener">"How To Scale Your Model," Part 4</a>, Google DeepMind, 2025</span>
     <span style="display:block; margin-bottom:5px;">Vaswani et al., <a href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noopener">"Attention Is All You Need"</a> (2017)</span>
     <span style="display:block; margin-bottom:5px;">Kaplan et al., <a href="https://arxiv.org/abs/2001.08361" target="_blank" rel="noopener">"Scaling Laws for Neural Language Models"</a> (2020)</span>
@@ -894,12 +894,6 @@ scores [B,N,T,S] · V [B,K,S,H] → out [B,N,T,H]</div>
   document.getElementById('collapseAllBtn').addEventListener('click', () => {
     document.querySelectorAll('.note').forEach(n => { n.classList.remove('open'); n.style.maxHeight = null; });
     document.querySelectorAll('.term').forEach(el => el.classList.remove('open'));
-  });
-
-  document.getElementById('themeBtn').addEventListener('click', () => {
-    const root = document.documentElement;
-    const cur = root.getAttribute('data-theme');
-    root.setAttribute('data-theme', cur === 'dark' ? 'light' : 'dark');
   });
 
   // reading progress bar
