@@ -26,13 +26,12 @@
 
   <header class="masthead">
     <div class="kicker">
-      <span>ANNOTATED READING · v51</span>
-      <a href="https://jax-ml.github.io/scaling-book/transformers/" target="_blank" rel="noopener">source ↗</a>
+      <span>TECHNICAL WRITING</span>
     </div>
     <h1 class="title">Counting FLOPs, Params, and Memory in a Transformer</h1>
     <div class="subtitle">
       A tap-to-explain walkthrough of how FLOPs, parameters, and memory are counted in a Transformer,
-      rewritten and annotated for reading on the go. Terms underlined in sepia open a plain explanation;
+      annotated for reading on the go. Terms underlined in sepia open a plain explanation;
       grids next to each formula let you tap a cell and count the multiplies and adds yourself.
     </div>
 
@@ -61,9 +60,23 @@
     </div>
   </header>
 
+  <nav class="side-toc" id="sideToc" aria-label="Section navigation">
+    <div class="side-toc-title">CONTENTS</div>
+    <ol>
+      <li><a href="#counting-dots" data-target="counting-dots">Counting dots</a></li>
+      <li><a href="#fwd-bwd" data-target="fwd-bwd">3× a forward pass</a></li>
+      <li><a href="#anatomy" data-target="anatomy">Anatomy of one layer</a></li>
+      <li><a href="#accounting" data-target="accounting">Doing the accounting</a></li>
+      <li><a href="#attention-cost" data-target="attention-cost">When attention matters</a></li>
+      <li><a href="#moe" data-target="moe">Mixture-of-Experts</a></li>
+      <li><a href="#remat" data-target="remat">Rematerialization</a></li>
+      <li><a href="#kv" data-target="kv">KV caching</a></li>
+      <li><a href="#takeaways" data-target="takeaways">Takeaways</a></li>
+    </ol>
+  </nav>
+
   <nav class="toc">
-    <details>
-      <summary>Contents</summary>
+    <div class="toc-title">Contents</div>
       <ol>
         <li><a href="#counting-dots">Counting dots: where FLOPs come from</a></li>
         <li><a href="#fwd-bwd">Why training costs 3× a forward pass</a></li>
@@ -75,22 +88,20 @@
         <li><a href="#kv">KV caching</a></li>
         <li><a href="#takeaways">Takeaways</a></li>
       </ol>
-    </details>
   </nav>
 
   <section class="sec" id="counting-dots">
     <h2 class="sec-title"><span class="num">01</span> Counting dots: where FLOPs come from</h2>
-    <p class="lead">Everything downstream in this piece, including a widely-used shorthand for estimating total training compute (<a href="#accounting">FLOPs ≈ 6 × parameters × tokens</a>, derived in §04 below), KV cache sizing, and MoE tradeoffs, is built on top of one small idea: counting multiply-adds in a matmul.</p>
-
-    <p>A <span class="term" data-k="dot">dot product</span> of two length-<i>P</i> vectors costs <b>2P</b> floating point operations: P multiplies and P adds. Below, <b>x</b> and <b>y</b> are the inputs and <b>r</b> is the result: tap it to see exactly which named cells of x and y it came from.</p>
+    <p class="lead">This started as a set of annotated notes on Google DeepMind's <a href="https://jax-ml.github.io/scaling-book/transformers/" target="_blank" rel="noopener">"How To Scale Your Model"</a>, and grew into an evergreen reference of my own, now with interactive visualizations built in.</p>
+    <p>A <span class="term tight" data-k="dot">dot product</span> of two length-<i>P</i> vectors costs <b>2P</b> floating point operations: P multiplies and P adds. Below, <b>x</b> and <b>y</b> are the inputs and <b>r</b> is the result: tap it to see exactly which named cells of x and y it came from.</p>
 
     <div class="gridviz" id="gv-dot"></div>
 
-    <p>Stretch that into a matrix-vector product and you're doing one dot product per row, so an <i>N×P</i> matrix <b>A</b> against a length-P vector <b>x</b> costs <b>2NP</b>. Tap any cell of the result <b>y</b> and you'll see it lights up one row of A and all of x, because that row is the only thing that fed it.</p>
+    <p>Stretch that into a matrix-vector product and you're doing one dot product per row, so an <i>N×P</i> matrix <b>A</b> against a length-P vector <b>x</b> costs <b>2NP</b>. Tap any cell of the result <b>y</b> and you'll see it lights up one row of A and all of x, because that row is the only thing that fed it.</p>
 
     <div class="gridviz" id="gv-matvec"></div>
 
-    <p>Stretch again into a full matrix-matrix product, <b>A</b>[N,P]·<b>B</b>[P,M], and now the result <b>C</b> is a whole grid: N rows × M cols, count them yourself: that's <b>2NPM</b> FLOPs total (N×M cells, each one a 2P-FLOP dot product). Tap any cell of C and watch one row of A and one column of B light up; those are the only two things that determined it.</p>
+    <p>Stretch again into a full matrix-matrix product, <b>A</b>[N,P]·<b>B</b>[P,M], and now the result <b>C</b> is a whole grid: N rows × M cols, count them yourself: that's <b>2NPM</b> FLOPs total (N×M cells, each one a 2P-FLOP dot product). Tap any cell of C and watch one row of A and one column of B light up; those are the only two things that determined it.</p>
 
     <div class="gridviz" id="gv-matmul"></div>
 
@@ -103,7 +114,7 @@
       <span class="lbl">G independent [N,P]·[P,M] matmuls, run side by side</span>
       FLOPs = G · 2NPM = 2·G·N·P·M
     </div>
-    <p>G shows up exactly once too, multiplying the total exactly the way P did: <span class="term" data-k="batch">batching</span> and <span class="term" data-k="contract">contracting</span> axes cost identically, per axis. The one real difference: G survives into the output (C is now shaped [G,N,M] instead of [N,M]), while P still doesn't. Whether an axis disappears from the output or not is the entire distinction between them; it has no bearing at all on how the FLOP count scales.</p>
+    <p>G shows up exactly once too, multiplying the total exactly the way P did: <span class="term tight" data-k="batch">batching</span> and <span class="term tight" data-k="contract">contracting</span> axes cost identically, per axis. The one real difference: G survives into the output (C is now shaped [G,N,M] instead of [N,M]), while P still doesn't. Whether an axis disappears from the output or not is the entire distinction between them; it has no bearing at all on how the FLOP count scales.</p>
 
     <p>So the fully general rule really is as simple as it sounds: <b>FLOPs = 2 × every axis that appears in either input, each counted once</b>, full stop, no exception for which kind of axis it is. The categories only tell you which axes survive into the output shape:</p>
 
@@ -111,7 +122,6 @@
       <span class="lbl">cost of contracting C[<b style="color:var(--teal)">G,H</b>,I,J,<b style="color:var(--amber)">K,L</b>] with D[<b style="color:var(--teal)">G,H</b>,M,N,<b style="color:var(--amber)">K,L</b>]</span>
       FLOPs = 2 · G·H·I·J·M·N·K·L (all eight letters, each counted once, same as always)
     </div>
-    <p class="gv-hint" style="font-style:normal;"><b style="color:var(--teal)">G,H</b> (batching) and I,J,M,N (free) all survive into the output <b>[G,H,I,J,M,N]</b>; <b style="color:var(--amber)">K,L</b> (contracting) get summed away and don't. The only reason batching and contracting axes get singled out at all is that they're the ones <i>shared between both inputs</i>, so if you'd naively multiplied together every axis of C and every axis of D, you'd have counted G, H, K, and L twice. This formula is exactly that naive product with the double-counting removed; the free axes never had that problem since each only appears in one input to begin with.</p>
 
     <p>One consequence is easy to miss and explains a lot about why Transformers scale so well: for a square matmul, <span class="term" data-k="cubic">compute grows as N³ while the data you have to move only grows as N²</span>. Bigger matmuls become relatively cheaper to feed, which is exactly why architectures built almost entirely out of matmuls are the ones that scale.</p>
 
@@ -136,7 +146,7 @@
 
   <section class="sec" id="fwd-bwd">
     <h2 class="sec-title"><span class="num">02</span> Why training costs 3× a forward pass</h2>
-    <p>During training you don't just run the matmul forward; you also need its gradient, and that gradient is itself two matmuls. If <b>C = A·B</b>, the chain rule gives you <span class="term" data-k="gradB">∂L/∂B = Aᵀ·(∂L/∂C)</span> and <span class="term" data-k="gradA">∂L/∂A = (∂L/∂C)·Bᵀ</span>, each one another <i>2NPM</i>-FLOP contraction.</p>
+    <p>During training you don't just run the matmul forward; you also need its gradient, and that gradient is itself two matmuls. If <b>C = A·B</b>, the chain rule gives you <span class="term tight" data-k="gradB">∂L/∂B = Aᵀ·(∂L/∂C)</span> and <span class="term tight" data-k="gradA">∂L/∂A = (∂L/∂C)·Bᵀ</span>, each one another <i>2NPM</i>-FLOP contraction.</p>
 
     <div class="formula-box">
       <span class="lbl">forward vs. training FLOPs for one matmul, PM parameters</span>
@@ -191,7 +201,7 @@ gating:       g = σ(x·W_in1) ⊙ (x·W_in2),  y = g·W_out</div>
 
     <p>In its traditional form this block is about as simple as a neural-net layer gets: project up from D to a wider hidden size F, apply a nonlinearity, then project back down to D.</p>
 
-    <p>Most modern implementations (LLaMA, DeepSeek, Gemma, and most other current open models) extend this with a <span class="term" data-k="gating">gating einsum</span>: a second, parallel up-projection that gets multiplied elementwise with the first before the same down-projection runs. That's <b>3</b> weight matrices of size <i>D·F</i> instead of the 2 above: the extra matrix buys a learned gate at the cost of 50% more MLP parameters.</p>
+    <p>Most modern implementations (LLaMA, DeepSeek, Gemma, and most other current open models) extend this with a <span class="term tight" data-k="gating">gating einsum</span>: a second, parallel up-projection that gets multiplied elementwise with the first before the same down-projection runs. That's <b>3</b> weight matrices of size <i>D·F</i> instead of the 2 above: the extra matrix buys a learned gate at the cost of 50% more MLP parameters.</p>
 
     <p>Putting numbers on the gating version above (the 3-matrix one, which is what's actually running in most current models):</p>
     <div class="acc-scroll">
@@ -242,7 +252,7 @@ gate = h1 ⊙ h2 [B,T,F] · W_out [F,D] → y [B,T,D]</div>
           <msub><mi>V</mi><mi>i</mi></msub>
         </mrow>
       </math>
-      <div class="eq-cap">↑ <b>dot-product attention.</b> No W anywhere in this line: Q<sub>i</sub>, K<sub>i</sub>, V<sub>i</sub> are just the per-head slices of Q, K, V computed above; both sides of every multiply here are activations, not a learned weight.</div>
+      <div class="eq-cap">↑ <b>dot‑product attention.</b> No W anywhere in this line: Q<sub>i</sub>, K<sub>i</sub>, V<sub>i</sub> are just the per-head slices of Q, K, V computed above; both sides of every multiply here are activations, not a learned weight.</div>
 
       <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
         <mrow>
@@ -259,15 +269,15 @@ gate = h1 ⊙ h2 [B,T,F] · W_out [F,D] → y [B,T,D]</div>
       <div class="eq-cap">↑ <b>the 4th projection.</b> <span class="wmat-label">W_O</span> is a learned weight matrix again, the same kind of matmul as the Q/K/V lines, just on the way back out.</div>
 
       <div class="plain">Q = x·W_Q,  K = x·W_K,  V = x·W_V                          ← projections (learned weights)
-head_i       = softmax( Q_i·K_iᵀ/√H + mask ) · V_i          ← dot-product attention (no weights)
+head_i       = softmax( Q_i·K_iᵀ/√H + mask ) · V_i          ← dot‑product attention (no weights)
 MultiHead(x) = Concat(head_1, …, head_N) · W_O               ← projection (learned weight)</div>
     </div>
 
-    <p>This block runs on the same D-wide residual stream as the MLP above. Attention's whole trick is splitting that D-wide vector into several smaller "heads" it can attend with independently, then stitching them back together, which means a handful of new letters show up here that haven't appeared yet: <b>N</b> = number of query heads, <b>K</b> = number of key/value heads, <b>H</b> = the size of each head (so N·H = D), and <b>T</b> / <b>S</b> = the number of query / key positions (usually the same sequence, so T=S).</p>
+    <p>This block runs on the same D-wide residual stream as the MLP above. Attention's whole trick is splitting that D-wide vector into several smaller "heads" it can attend with independently, then stitching them back together. That introduces a few new letters: <b>N</b> is the number of query heads, <b>K</b> is the number of key/value heads, and <b>H</b> is the size of each head, so N·H = D. Two more track position counts: <b>T</b> is the number of query positions and <b>S</b> is the number of key positions (usually the same sequence, so T = S).</p>
 
     <p>Four weight matrices move x in and out of that per-head shape: <b>Q</b>, <b>K</b>, and <b>V</b> each project the D-wide input down into several H-wide heads (N of them for Q, K of them for K and V), and the output projection <b>O</b> puts all the heads back together into D.</p>
 
-    <p>It's easy to read "projections" and "dot-product attention" as two names for the same thing: both are matmuls, and <a href="#counting-dots">§01</a> already showed every matmul is nothing but dot products underneath. The real difference is <i>what's on each side of the multiply</i>, and it's worth being clear about before going further, because the accounting tables below treat these two as separate rows for exactly this reason:</p>
+    <p>It's easy to read "projections" and "dot‑product attention" as two names for the same thing: both are matmuls, and <a href="#counting-dots">§01</a> already showed every matmul is nothing but dot products underneath. The real difference is <i>what's on each side of the multiply</i>, and it's worth being clear about before going further, because the accounting tables below treat these two as separate rows for exactly this reason:</p>
 
     <div class="callout">
       <span class="tag">TWO DIFFERENT KINDS OF MATMUL IN THIS BLOCK</span>
@@ -275,7 +285,7 @@ MultiHead(x) = Concat(head_1, …, head_N) · W_O               ← projection (
       <b>Dot-product attention</b> (Q·Kᵀ, then ·V) has no weight matrix anywhere in it: both sides of every multiply are activations, Q times K, then that result times V. Both sides grow with sequence length, so the cost scales with T² instead of just T. That quadratic term is the entire reason it gets its own row in the table instead of being lumped in with the projections.
     </div>
 
-    <p>Why does having two sequence-length sides turn linear scaling into quadratic? Because, as <a href="#counting-dots">§01</a> already established, a matmul's cost is just (rows × cols) output cells, each one a fixed-size dot product. In a projection, only the <i>row</i> count (number of tokens) depends on sequence length; the column count is a fixed hyperparameter (N·H or D). <b>In attention, <i>both</i> the row count (T query positions) and the column count (S key positions) depend on sequence length</b>, so doubling the sequence length doesn't just double one side of the output grid, it doubles both sides at once, and the grid's area goes up 4×, not 2×. Scale tokens by 10× and a projection costs 10× more; attention costs 100× more.</p>
+    <p>Why does having two sequence-length sides turn linear scaling into quadratic? Because, as <a href="#counting-dots">§01</a> already established, a matmul's cost is just (rows × cols) output cells, each one a fixed-size dot product. In a projection, only the <i>row</i> count (number of tokens) depends on sequence length; the column count is a fixed hyperparameter (N·H or D). <b>In attention, <i>both</i> the row count (T query positions) and the column count (S key positions) depend on sequence length</b>, so doubling the sequence length doesn't just double one side of the output grid, it doubles both sides at once, and the grid's area goes up 4×, not 2×. Scale tokens by 10× and a projection costs 10× more; attention costs 100× more.</p>
 
     <p>That per-head computation, the <b>head_i</b> line in the equation above, is exactly what the diagram below walks through:</p>
 
@@ -318,10 +328,10 @@ MultiHead(x) = Concat(head_1, …, head_N) · W_O               ← projection (
         <rect x="100" y="216" width="120" height="18" rx="4" fill="var(--panel-2)" stroke="var(--line)"></rect>
         <text x="160" y="229" text-anchor="middle" font-family="var(--mono)" font-size="10" fill="var(--text)">output_h  [T,H]</text>
       </svg>
-      <div class="dg-note">scores are scaled by 1/√H before the softmax for numerical stability; that scaling is O(TS), negligible next to the matmul FLOPs, which is why it never shows up in the accounting tables. The amber box is where <span class="term" data-k="causal">causal masking</span> happens: future positions get set to −∞ before the softmax runs, so they contribute zero weight.</div>
+      <div class="dg-note">scores are scaled by 1/√H before the softmax for numerical stability; that scaling is O(TS), negligible next to the matmul FLOPs, which is why it never shows up in the accounting tables. The amber box is where <span class="term tight" data-k="causal">causal masking</span> happens: future positions get set to −∞ before the softmax runs, so they contribute zero weight.</div>
     </div>
 
-    <p>Once every head has produced its own <b>[T,H]</b> output, all of them get concatenated back into <b>[T, N·H]</b> and pass through one more projection, <b>W_O</b>, back down to D: the fourth matmul in the accounting table below. The <span class="term" data-k="dpa">dot-product attention</span> step shown above is the one that scales with sequence length squared rather than with model width, which is exactly why <a href="#attention-cost">the "when does attention actually matter?" section below</a> treats it separately from the four QKVO projection matmuls.</p>
+    <p>Once every head has produced its own <b>[T,H]</b> output, all of them get concatenated back into <b>[T, N·H]</b> and pass through one more projection, <b>W_O</b>, back down to D: the fourth matmul in the accounting table below. The <span class="term tight" data-k="dpa">dot‑product attention</span> step shown above is the one that scales with sequence length squared rather than with model width, which is exactly why <a href="#attention-cost">the "when does attention actually matter?" section below</a> treats it separately from the four QKVO projection matmuls.</p>
 
     <p>Putting numbers on the four projections first:</p>
     <div class="acc-scroll">
@@ -339,13 +349,8 @@ MultiHead(x) = Concat(head_1, …, head_N) · W_O               ← projection (
 x [B,T,D] · W_K [D,K·H] → K [B,T,K·H]   (W_V is the same shape as W_K)
 concat(heads) [B,T,N·H] · W_O [N·H,D] → out [B,T,D]</div>
 
-    <div class="callout">
-      <span class="tag">WHY 12, NOT 24?</span>
-      Adding the four rows: <b>6BTDNH</b> (Q) + <b>6BTDKH</b> (K) + <b>6BTDKH</b> (V) + <b>6BTDNH</b> (O) = 6BTDH·(N+K+K+N) = 6BTDH·(2N+2K) = <b>12BTD(N+K)H</b>. Same for params: DNH+DKH+DKH+DNH = <b>2D(N+K)H</b>.<br><br>
-      If it looks like it should just be "4 matrices → ×24", that's exactly right in the special case <b>N=K</b> (plain multi-head attention, no GQA/MQA): then 12BTD(N+K)H = 12BTD(2N)H = <b>24BTDNH</b>, precisely 4 matrices × 6BTDNH each, matching your intuition exactly. The (N+K) form is just the more general version, because with GQA/MQA, K and V are smaller than Q and O (K&lt;N), so the four matrices aren't all the same size, and you can't collapse them to a single ×4.
-    </div>
 
-    <p>And now the dot-product attention step itself: the one with no weight matrix, from the diagram above:</p>
+    <p>And now the dot‑product attention step itself: the one with no weight matrix, from the diagram above:</p>
     <div class="acc-scroll">
     <table class="acc">
       <caption>Dot-product attention itself (batched over B and K)</caption>
@@ -359,11 +364,17 @@ concat(heads) [B,T,N·H] · W_O [N·H,D] → out [B,T,D]</div>
 scores [B,N,T,S] · V [B,K,S,H] → out [B,N,T,H]</div>
     <div class="callout">
       <span class="tag">ALSO WORTH KNOWING</span>
-      Whether normalization happens before or after the residual add, <span class="term" data-k="prenorm">pre-norm vs. post-norm</span>, doesn't change the FLOP count, but it changes training stability enough that essentially every current model (LLaMA included) has settled on pre-norm.
+      Whether normalization happens before or after the residual add, <span class="term tight" data-k="prenorm">pre-norm vs. post-norm</span>, doesn't change the FLOP count, but it changes training stability enough that essentially every current model (LLaMA included) has settled on pre-norm.
     </div>
 
     <h3 class="sub-title">Attention variants: MHA, GQA, and MQA</h3>
-    <p>Everything above holds for any split between N query heads and K key/value heads: that split is exactly what separates the three attention variants named everywhere. <b>Multi-Head Attention (MHA)</b><sup><a href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noopener">[1]</a></sup> uses one K/V head per query head (K=N); <b>Multi-Query Attention (MQA)</b><sup><a href="https://arxiv.org/abs/1911.02150" target="_blank" rel="noopener">[2]</a></sup> collapses every query head onto a single shared K/V head (K=1); <b>Grouped-Query Attention (GQA)</b><sup><a href="https://arxiv.org/abs/2305.13245" target="_blank" rel="noopener">[3]</a></sup> sits in between, with groups of query heads sharing one K/V head. Nothing about the computation itself changes: same equation, same per-head softmax(Q·Kᵀ/√H)·V from above, only how many distinct K and V arrays feed it. Tap through the three modes below to see the actual head-to-head assignment, not just the head counts:</p>
+    <p>Everything above holds for any split between N query heads and K key/value heads: that split is exactly what separates the three attention variants named everywhere.</p>
+    <ul class="plain">
+      <li><b>Multi-Head Attention (MHA)</b><sup><a href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noopener">[1]</a></sup> uses one K/V head per query head (K=N).</li>
+      <li><b>Multi-Query Attention (MQA)</b><sup><a href="https://arxiv.org/abs/1911.02150" target="_blank" rel="noopener">[2]</a></sup> collapses every query head onto a single shared K/V head (K=1).</li>
+      <li><b>Grouped-Query Attention (GQA)</b><sup><a href="https://arxiv.org/abs/2305.13245" target="_blank" rel="noopener">[3]</a></sup> sits in between, with groups of query heads sharing one K/V head.</li>
+    </ul>
+    <p>Nothing about the computation itself changes: same equation, same per-head softmax(Q·Kᵀ/√H)·V from above, only how many distinct K and V arrays feed it. Tap through the three modes below to see the actual head-to-head assignment, not just the head counts:</p>
 
     <div class="diagram-box">
       <span class="lbl">query heads → key/value heads: tap a mode</span>
@@ -385,15 +396,15 @@ scores [B,N,T,S] · V [B,K,S,H] → out [B,N,T,H]</div>
 
   <section class="sec" id="accounting">
     <h2 class="sec-title"><span class="num">04</span> Doing the accounting</h2>
-    <p>You've already seen every number in this section. The MLP total (<b>≈18BTDF</b>) and the attention block's two totals (<b>12BTD(N+K)H</b> for the projections, <b>≈12BT²NH</b> for dot-product attention itself) were worked out alongside their diagrams in <a href="#anatomy">§03</a>. All that's left is adding them up:</p>
+    <p>You've already seen every number in this section. The MLP total (<b>≈18BTDF</b>) and the attention block's two totals (<b>12BTD(N+K)H</b> for the projections, <b>≈12BT²NH</b> for dot‑product attention itself) were worked out alongside their diagrams in <a href="#anatomy">§03</a>. All that's left is adding them up:</p>
 
-    <p>Add the MLP and the QKVO projections together (leaving dot-product attention out for a moment) and the per-layer, per-token FLOPs collapse to something clean:</p>
+    <p>Add the MLP and the QKVO projections together (leaving dot‑product attention out for a moment) and the per-layer, per-token FLOPs collapse to something clean:</p>
     <div class="formula-box">
-      <span class="lbl">ignoring dot-product attention itself, reasonable at short-to-medium context</span>
+      <span class="lbl">ignoring dot‑product attention itself, reasonable at short-to-medium context</span>
       total training FLOPs ≈ 6 · (num tokens) · (num parameters)
     </div>
 
-    <div class="derivation-box"><span class="lbl">how 18BTDF + 12BTD(N+K)H turns into 6 · tokens · params</span><span class="step-n">1) start with both totals, FLOPs and params, from §03</span>
+    <div class="derivation-box"><span class="lbl">how 18BTDF + 12BTD(N+K)H turns into 6 · tokens · params</span><span class="step-n">1) start with both totals, FLOPs and params, from <a href="#anatomy">§03</a></span>
    MLP:          FLOPs = 18BTDF          params = 3DF
    projections:  FLOPs = 12BTD(N+K)H     params = 2D(N+K)H
 
@@ -413,7 +424,6 @@ scores [B,N,T,S] · V [B,K,S,H] → out [B,N,T,H]</div>
                = 6 · (num tokens) · (num parameters)</div>
 
     <p>Notice what actually did the work in step 2: it wasn't anything specific to the MLP or to attention. It's <a href="#fwd-bwd">§02</a>'s fact that <i>every projection matmul</i> (activations times a fixed, learned weight matrix) costs 6× its own tokens×params. Add up FLOPs from any collection of <i>projection</i> matmuls and you're automatically adding up 6×tokens×(their combined params), regardless of which projections they are. That's the whole reason <b>FLOPs ≈ 6·N_params·N_tokens</b> works as a rule of thumb across entire models, not just single layers.</p>
-    <p class="gv-hint" style="font-style:normal;">This is exactly why the rule has a limit: it only covers matmuls with a weight matrix on one side. Dot-product attention has <i>no</i> weight matrix; both sides are activations, as the callout above established, so it doesn't fit this pattern at all, which is precisely why it needed to be left out of the sum in step 3 rather than folded in.</p>
 
     <p>This is the whole justification for the rule of thumb you'll see quoted everywhere: <b>FLOPs ≈ 6 · N_params · N_tokens</b>. It's an approximation that quietly assumes the T²-scaling attention term is small next to everything else, which is true until it isn't.</p>
   </section>
@@ -426,9 +436,9 @@ scores [B,N,T,S] · V [B,K,S,H] → out [B,N,T,H]</div>
       attention FLOPs / matmul FLOPs ≈ T / 8D
     </div>
 
-    <div class="derivation-box"><span class="lbl">step by step, from the totals in §03/§04</span><span class="step-n">1) start with both totals</span>
+    <div class="derivation-box"><span class="lbl">step by step, from the totals in <a href="#anatomy">§03</a>/<a href="#accounting">§04</a></span><span class="step-n">1) start with both totals</span>
    matmul FLOPs  = 18BTDF + 12BTD(N+K)H          (MLP + the four projections)
-   attn itself   = 12BT²NH                        (Q·Kᵀ and ·V, from §03)
+   attn itself   = 12BT²NH                        (Q·Kᵀ and ·V, from <a href="#anatomy">§03</a>)
 
 <span class="step-n">2) apply the two simplifying assumptions</span>
    F = 4D                    (typical MLP expansion ratio)
@@ -450,7 +460,7 @@ scores [B,N,T,S] · V [B,K,S,H] → out [B,N,T,H]</div>
    = (1/8)   · (T/D)
    = T / 8D</div>
 
-    <p>So dot-product attention only starts to dominate once <span class="term" data-k="crossover">sequence length exceeds roughly 8× the model width</span>. For a D≈8k model that's around 64K tokens of context; for a smaller model like a 4.6k-width Gemma variant, the crossover arrives much earlier, near 37K tokens. This is why the "quadratic attention is a scaling disaster" intuition is misleading for large models but genuinely bites for small ones at long context. It's also why techniques like <span class="term" data-k="flash">Flash Attention</span> and local/sliding-window attention exist to push that crossover further out.</p>
+    <p>So dot‑product attention only starts to dominate once <span class="term" data-k="crossover">sequence length exceeds roughly 8× the model width</span>. For a D≈8k model that's around 64K tokens of context; for a smaller model like a 4.6k-width Gemma variant, the crossover arrives much earlier, near 37K tokens. This is why the "quadratic attention is a scaling disaster" intuition is misleading for large models but genuinely bites for small ones at long context. It's also why techniques like <span class="term tight" data-k="flash">Flash Attention</span> and local/sliding-window attention exist to push that crossover further out.</p>
   </section>
 
   <section class="sec" id="moe">
@@ -458,13 +468,13 @@ scores [B,N,T,S] · V [B,K,S,H] → out [B,N,T,H]</div>
     <p>An MoE layer is, to a rough first approximation, an ordinary dense layer duplicated into <i>E</i> independent MLP "experts," with a router sending each token to only <i>k</i> of them. The ratio <span class="term" data-k="sparsity">E/k is the sparsity</span>, typically 8–64× (DeepSeek-V3, for instance, routes each token to 8 of 256 experts).</p>
 
     <div class="formula-box">
-      <span class="lbl">the exact MLP numbers from §03, now with E experts and k active per token</span>
-      dense MLP (§03):    FLOPs = 18BTDF          params = 3DF
+      <span class="lbl">the exact MLP numbers from <a href="#anatomy">§03</a>, now with E experts and k active per token</span>
+      dense MLP (<a href="#anatomy">§03</a>):    FLOPs = 18BTDF          params = 3DF
       MoE MLP:             FLOPs = k · 18BTDF      params = E · 3DF
     </div>
-    <p>Nothing about the block itself is new: an MoE layer really is just E copies of the exact 18BTDF / 3DF block from §03, sitting side by side. Compute scales with <b>k</b> because that's how many of those copies any single token actually runs through; parameters scale with <b>E</b> because all of them have to be stored whether or not a given token uses them. Divide one scaling by the other and you get E/k back: DeepSeek-V3's E=256, k=8 means <b>256×</b> the parameter capacity of a single dense MLP for only <b>8×</b> its compute.</p>
+    <p>Nothing about the block itself is new: an MoE layer really is just E copies of the exact 18BTDF / 3DF block from <a href="#anatomy">§03</a>, sitting side by side. Compute scales with <b>k</b> because that's how many of those copies any single token actually runs through; parameters scale with <b>E</b> because all of them have to be stored whether or not a given token uses them. Divide one scaling by the other and you get E/k back: DeepSeek-V3's E=256, k=8 means <b>256×</b> the parameter capacity of a single dense MLP for only <b>8×</b> its compute.</p>
 
-    <p>That buys you a much larger parameter count for a nearly fixed compute budget per token. The bill comes due in communication instead of FLOPs: routing tokens to their assigned experts and back requires an extra pair of <span class="term" data-k="a2a">all-to-all</span> exchanges per MoE layer that a dense model never needs.</p>
+    <p>That buys you a much larger parameter count for a nearly fixed compute budget per token. The bill comes due in communication instead of FLOPs: routing tokens to their assigned experts and back requires an extra pair of <span class="term tight" data-k="a2a">all-to-all</span> exchanges per MoE layer that a dense model never needs.</p>
   </section>
 
   <section class="sec" id="remat">
@@ -482,7 +492,7 @@ scores [B,N,T,S] · V [B,K,S,H] → out [B,N,T,H]</div>
 
     <div class="callout">
       <span class="tag">WHY THIS MATTERS BEYOND THE FLOP COUNT</span>
-      The real design problem is rarely "minimize FLOPs" in isolation; it's picking a remat policy against a fixed HBM budget, batch size, and pipeline/sharding scheme simultaneously, since the "extra" recompute FLOPs and the activation memory footprint trade off directly against each other on the same roofline. In JAX this is controlled per-operation with <span class="term" data-k="jaxremat">jax.remat / jax.checkpoint</span>, which lets you set policy at the granularity of individual ops rather than only per-layer.
+      The real design problem is rarely "minimize FLOPs" in isolation; it's picking a remat policy against a fixed HBM budget, batch size, and pipeline/sharding scheme simultaneously, since the "extra" recompute FLOPs and the activation memory footprint trade off directly against each other on the same roofline. In JAX this is controlled per-operation with <span class="term tight" data-k="jaxremat">jax.remat / jax.checkpoint</span>, which lets you set policy at the granularity of individual ops rather than only per-layer.
     </div>
   </section>
 
@@ -903,6 +913,35 @@ scores [B,N,T,S] · V [B,K,S,H] → out [B,N,T,H]</div>
     const scrolled = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
     bar.style.width = scrolled + '%';
   });
+
+  // side table of contents: highlight the section currently in view
+  (function(){
+    const sideToc = document.getElementById('sideToc');
+    if (!sideToc) return;
+    const links = Array.from(sideToc.querySelectorAll('a[data-target]'));
+    const linkFor = id => links.find(a => a.dataset.target === id);
+    const sections = links
+      .map(a => document.getElementById(a.dataset.target))
+      .filter(Boolean);
+
+    let current = null;
+    const setActive = id => {
+      if (id === current) return;
+      current = id;
+      links.forEach(a => a.classList.toggle('active', a.dataset.target === id));
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      // pick the entry closest to the top of the viewport among those intersecting
+      const visible = entries.filter(e => e.isIntersecting);
+      if (visible.length === 0) return;
+      visible.sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+      setActive(visible[0].target.id);
+    }, { rootMargin: '-15% 0px -70% 0px', threshold: 0 });
+
+    sections.forEach(s => observer.observe(s));
+    if (sections[0]) setActive(sections[0].id);
+  })();
 </script>
 </body>
 </html>
